@@ -3,7 +3,7 @@ package org.tinkernut.apririce;
 import java.util.HashMap;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.HelpCommand;
-import org.tinkernut.apririce.commands.utils.*;
+import org.tinkernut.apririce.commands.utils.Parser;
 
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -72,5 +72,4 @@ public class Bot implements IRCEventListener {
 			}
 		}
 	}
-	
 }
