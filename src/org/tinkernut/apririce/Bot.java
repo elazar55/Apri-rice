@@ -3,6 +3,7 @@ package org.tinkernut.apririce;
 import java.util.HashMap;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.HelpCommand;
+import org.tinkernut.apririce.commands.utils.*;
 
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -19,17 +20,16 @@ public class Bot implements IRCEventListener {
 	 */
 	private ConnectionManager con;
 	private Command helpCommand;
-	private HashMap<String, Command> commands;
+	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
 	/**
 	 * Class constructor
 	 */
 	public Bot() {
 		// Initialize globals
+		commandsMap = new HashMap<String, Command>();
 		helpCommand = new HelpCommand();
-		
-		commands = new HashMap<String, Command>();
-		commands.put("help", helpCommand);
+		commandsMap.put("help", helpCommand);
 
 		// TODO: Create storage
 		// Bot profile (nick)
@@ -37,7 +37,6 @@ public class Bot implements IRCEventListener {
 		// Request Connection to server
 		con.requestConnection("irc.geekshed.net").addIRCEventListener(this);
 	}
-	
 	/**
 	 * Event handler
 	 */
@@ -59,11 +58,18 @@ public class Bot implements IRCEventListener {
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
 			
-		// Messaged successfuly recieved in channel
+		// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			MessageEvent me = (MessageEvent) e;
 			
-			
+			// Check and execute any commands
+			if (me.getMessage().startsWith(CMD_START)) {
+				String commandString = Parser.stripCommand(me.getMessage());
+				if (commandsMap.containsKey(commandString)) {
+					commandsMap.get(commandString).exec(this, Parser.stripArguments(me.getMessage()));
+				}
+				// TODO: Check for private message
+			}
 		}
 	}
 	

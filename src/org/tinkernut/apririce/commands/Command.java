@@ -1,10 +1,10 @@
 package org.tinkernut.apririce.commands;
 
-import org.tinkernut.apririce.*;
-import org.tinkernut.apririce.users.*;
+import org.tinkernut.apririce.Bot;
+import org.tinkernut.apririce.users.User;;
 
 public interface Command {
-    public void exec(final Bot bot, String params);
+    void exec(final Bot bot, String params);
 
-    public void execPriv(final Bot bot, User sender, String params);
+    void execPriv(final Bot bot, User sender, String params);
 }
