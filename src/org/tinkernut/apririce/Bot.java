@@ -1,5 +1,10 @@
 package org.tinkernut.apririce;
 
+import java.util.HashMap;
+
+import org.tinkernut.apririce.commands.Command;
+import org.tinkernut.apririce.commands.HelpCommand;
+
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
@@ -14,16 +19,24 @@ public class Bot implements IRCEventListener {
 	 * Globals
 	 */
 	private ConnectionManager con;
-	
+	private Command helpCommand;
+	private HashMap<String, Command> commands;
+	private final String CMD_START = "|";
 	/**
 	 * Class constructor
 	 */
 	public Bot() {
+		// Initialize globals
+		helpCommand = new HelpCommand();
+		
+		commands = new HashMap<String, Command>();
+		commands.put("help", helpCommand);
+
 		// TODO: Create storage
 		// Bot profile (nick)
 		con = new ConnectionManager(new Profile("Apri-rice"));
 		// Request Connection to server
-		con.requestConnection("irc.geekshed.net");
+		con.requestConnection("irc.geekshed.net").addIRCEventListener(this);
 	}
 	
 	/**
@@ -50,6 +63,7 @@ public class Bot implements IRCEventListener {
 		// Messaged successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			MessageEvent me = (MessageEvent) e;
+			
 			
 		}
 	}
