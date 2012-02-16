@@ -1,7 +1,6 @@
 package org.tinkernut.apririce;
 
 import java.util.HashMap;
-
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.HelpCommand;
 
