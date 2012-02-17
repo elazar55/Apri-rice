@@ -1,9 +1,13 @@
+// TODO: Make threaded
+
 package org.tinkernut.apririce;
 
 import java.util.HashMap;
 import org.tinkernut.apririce.commands.Command;
+import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.utils.Parser;
+import org.tinkernut.apririce.textUtils.TextBuffer;
 
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -19,7 +23,8 @@ public class Bot implements IRCEventListener {
 	 * Globals
 	 */
 	private ConnectionManager con;
-	private Command helpCommand;
+	
+	public TextBuffer textBuffer;
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
 	/**
@@ -28,8 +33,9 @@ public class Bot implements IRCEventListener {
 	public Bot() {
 		// Initialize globals
 		commandsMap = new HashMap<String, Command>();
-		helpCommand = new HelpCommand();
-		commandsMap.put("help", helpCommand);
+		commandsMap.put("help", new HelpCommand());
+		commandsMap.put("define", new DefineCommand());
+		textBuffer = new TextBuffer();
 
 		// TODO: Create storage
 		// Bot profile (nick)
@@ -66,7 +72,7 @@ public class Bot implements IRCEventListener {
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
 				if (commandsMap.containsKey(commandString)) {
-					commandsMap.get(commandString).exec(this, Parser.stripArguments(me.getMessage()));
+					commandsMap.get(commandString).exec(this, Parser.stripArguments(me.getMessage()), me);
 				}
 				// TODO: Check for private message
 			}
