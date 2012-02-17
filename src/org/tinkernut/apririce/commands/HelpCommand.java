@@ -1,7 +1,6 @@
 package org.tinkernut.apririce.commands;
 
 import jerklib.events.MessageEvent;
-
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
 
