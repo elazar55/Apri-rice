@@ -1,4 +1,4 @@
-package org.tinkernut.apririce.commands.utils;
+package org.tinkernut.apririce.textUtils;
 
 public class Parser {
 	public static String stripCommand(String cmd) {
