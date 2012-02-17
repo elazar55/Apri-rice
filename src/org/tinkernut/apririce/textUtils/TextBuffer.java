@@ -11,12 +11,11 @@ public class TextBuffer {
 	}
 	public final void addArray(final String[] textArray) {
 		for (int i = 0; i < textArray.length; i++) {
-			tBuffer += textArray[i];
+			tBuffer += textArray[i] + " ";
 		}
 	}
 	public final void display(final MessageEvent me) {
-		me.getChannel().say(tBuffer.concat(" "));
-	}
-	public void wrapText(final String text) {
+		me.getChannel().say(tBuffer);
+		tBuffer = "";
 	}
 }
