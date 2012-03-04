@@ -19,19 +19,19 @@ public class DefineCommand extends Command {
 	public void init(final Bot b, final String s, final MessageEvent m) {
 		super.init(b, s, m);
 		urlMap = new HashMap<String, URL>();
-		
+
 		try {
-		urlMap.put("urban", new URL("http://www.urbandictionary.com/define.php?term="));
+			urlMap.put("urban", new URL("http://www.urbandictionary.com/define.php?term="));
 		}catch (MalformedURLException e) {
 			new TextBuffer().addAndDisplay("Internal error: Malformed URL", me);
 		}
 	}
-	
+
 	public void run() {
-		
+
 	}
 
-	protected void execPriv(final Bot bot, final User nder, final String params, final MessageEvent me) {
+	protected void execPriv(Bot bot, User sender, String params, MessageEvent me) {
 		
 	}
 }

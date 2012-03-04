@@ -17,5 +17,5 @@ public abstract class Command implements Runnable{
 
 	public abstract void run();
 
-	protected abstract void execPriv(final Bot bot, final User nder, final String params, final MessageEvent me);
+	protected abstract void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me);
 }
