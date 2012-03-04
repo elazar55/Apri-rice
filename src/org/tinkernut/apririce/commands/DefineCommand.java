@@ -4,7 +4,6 @@ package org.tinkernut.apririce.commands;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -17,23 +16,29 @@ import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
 public class DefineCommand extends Command {
-	Map<String, String> urlMap;
-	URLConnection urlConnection;
-	InputStreamReader inputStream;
-	BufferedReader bReader;
-
-	@Override
-	public void init(final Bot b, final String s, final MessageEvent m) {
-		super.init(b, s, m);
-		urlMap = new HashMap<String, String>();
-		urlMap.put("urban", "http://www.urbandictionary.com/define.php?term=");
-	}
-
 	public void run() {
-		if (params.contains("urban") && Parser.stripAguments(params) != "") {
+		Map<String, String> urlMap = new HashMap<String, String>();
+		urlMap.put("urban", "http://www.urbandictionary.com/define.php?term=");
+		
+		if (urlMap.containsKey(params) && Parser.stripAguments(params) != "") {
 			try {
-				urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params)).openConnection();
-				bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				//Establish connection and download HTML source
+				URLConnection urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params)).openConnection();
+				BufferedReader bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+				
+				//Put whole page source into string
+				String HTMLSource = "";
+				
+				while((bReader.readLine()) != null) {
+					HTMLSource += bReader.readLine();
+				}
+				HTMLSource = HTMLSource.replace("\n\t", " ");
+				
+				//Extract definition
+				int start = HTMLSource.indexOf("<div class=\"definition\">")+"<div class=\"definition\">".length();
+				int end = HTMLSource.indexOf("</div>", start);
+				String definition = HTMLSource.substring(start, end);
+				new TextBuffer().addAndDisplay(definition, me);
 			} catch (IOException e) {
 				new TextBuffer().addAndDisplay("Unable to establish connection.", me);
 			}
