@@ -5,9 +5,9 @@ import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
 
 public abstract class Command implements Runnable{
-	private Bot bot;
-	private String params;
-	private MessageEvent me;
+	protected Bot bot;
+	protected String params;
+	protected MessageEvent me;
 	
 	public void init(final Bot b, String s, MessageEvent m) {
 		bot = b;
