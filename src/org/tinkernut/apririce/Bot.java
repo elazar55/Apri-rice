@@ -7,8 +7,6 @@ import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.textUtils.Parser;
-import org.tinkernut.apririce.textUtils.TextBuffer;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
@@ -24,7 +22,6 @@ public class Bot implements IRCEventListener {
 	 */
 	private ConnectionManager con;
 
-	public TextBuffer textBuffer;
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
 	
@@ -38,8 +35,6 @@ public class Bot implements IRCEventListener {
 		
 		commandsMap.put("help", new HelpCommand());
 		commandsMap.put("define", new DefineCommand());
-		
-		textBuffer = new TextBuffer();
 
 		// TODO: Create storage
 		// Bot profile (nick)
