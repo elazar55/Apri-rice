@@ -11,6 +11,7 @@ import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
 import org.tinkernut.apririce.commands.Command;
+import org.tinkernut.apririce.textUtils.TextBuffer;
 
 public class DefineCommand extends Command {
 	Map<String, URL> urlMap;
@@ -22,7 +23,7 @@ public class DefineCommand extends Command {
 		try {
 		urlMap.put("urban", new URL("http://www.urbandictionary.com/define.php?term="));
 		}catch (MalformedURLException e) {
-			
+			new TextBuffer().addAndDisplay("Internal error: Malformed URL", me);
 		}
 	}
 	
