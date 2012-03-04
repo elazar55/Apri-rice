@@ -9,6 +9,10 @@ public class TextBuffer {
 	public final void add(final String text) {
 		tBuffer += text;
 	}
+	public final void addAndDisplay(final String text, MessageEvent me) {
+		tBuffer += text;
+		display(me);
+	}
 	public final void addArray(final String[] textArray) {
 		for (int i = 0; i < textArray.length; i++) {
 			tBuffer += textArray[i] + " ";
