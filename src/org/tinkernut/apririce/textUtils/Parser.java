@@ -17,4 +17,7 @@ public class Parser {
 			return "";
 		}
 	}
+	public static String getFirstArgument(String args) {
+		return args.substring(0, args.indexOf(' '));
+	}
 }
