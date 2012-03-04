@@ -31,7 +31,7 @@ public class DefineCommand extends Command {
 
 	}
 
-	protected void execPriv(Bot bot, User sender, String params, MessageEvent me) {
+	protected void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me) {
 		
 	}
 }
