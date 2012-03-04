@@ -79,8 +79,7 @@ public class Bot implements IRCEventListener {
 				if (commandsMap.containsKey(commandString)) {
 					
 					Command command = (commandsMap.get(commandString));
-					command.init(this, Parser.stripArguments(me.getMessage()), me);
-					
+					command.init(this, Parser.stripArguments(me.getMessage()), me);					
 					command.run();
 					
 					// TODO: Finish threading implementation

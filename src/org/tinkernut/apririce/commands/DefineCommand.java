@@ -2,28 +2,17 @@
 
 package org.tinkernut.apririce.commands;
 
-import java.io.BufferedReader;
-import java.net.URL;
 import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
+import org.tinkernut.apririce.commands.Command;
 
-public class DefineCommand implements Command {
-	Bot bot;
-	String params;
-	MessageEvent me;
-	
-	public void init(Bot b, String s, MessageEvent m) {
-		bot = b;
-		params = s;
-		me = m;
-	}
-	
+public class DefineCommand extends Command {
 	public void run() {
 		
 	}
 
-	public void execPriv(Bot bot, User sender, String params, MessageEvent me) {
-
+	protected void execPriv(final Bot bot, User nder, String params, MessageEvent me) {
+		
 	}
 }
