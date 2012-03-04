@@ -6,7 +6,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
 import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
@@ -28,10 +27,12 @@ public class DefineCommand extends Command {
 	}
 
 	public void run() {
-
+		if (params.equals("urban")) {
+			
+		}
 	}
 
 	protected void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me) {
-		
+
 	}
 }
