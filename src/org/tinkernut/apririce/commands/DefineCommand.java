@@ -16,7 +16,7 @@ import org.tinkernut.apririce.textUtils.TextBuffer;
 public class DefineCommand extends Command {
 	Map<String, URL> urlMap;
 	@Override
-	public void init(final Bot b, String s, MessageEvent m) {
+	public void init(final Bot b, final String s, final MessageEvent m) {
 		super.init(b, s, m);
 		urlMap = new HashMap<String, URL>();
 		
@@ -31,7 +31,7 @@ public class DefineCommand extends Command {
 		
 	}
 
-	protected void execPriv(final Bot bot, User nder, String params, MessageEvent me) {
+	protected void execPriv(final Bot bot, final User nder, final String params, final MessageEvent me) {
 		
 	}
 }
