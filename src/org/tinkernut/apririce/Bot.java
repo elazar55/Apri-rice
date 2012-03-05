@@ -57,7 +57,6 @@ public class Bot implements IRCEventListener, Runnable {
 			return;
 		}
 	}
-
 	/**
 	 * Event handler
 	 */
