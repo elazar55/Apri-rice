@@ -16,21 +16,34 @@ import jerklib.events.QuitEvent;
 import jerklib.events.IRCEvent.Type;
 import jerklib.listeners.IRCEventListener;
 
-public class Bot implements IRCEventListener {
+public class Bot implements IRCEventListener, Runnable {
 	/**
 	 * Globals
 	 */
+	private String ircServer;
+	private String channelName;
 	private ConnectionManager con;
-
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
-	
+
 	Thread t1, t2;
 	/**
 	 * Class constructor
 	 */
-	public Bot() {
-		// Initialize globals
+
+	public void run() {
+		// Request Connection to server
+		try {
+		con.requestConnection(ircServer).addIRCEventListener(this);
+		}
+		catch (Exception e) {
+			System.out.println("Failed to connect to channel. Exiting.");
+			return;
+		}
+	}
+	
+	public Bot(String server, String channel) {
+		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
 		
 		commandsMap.put("help", new HelpCommand());
@@ -38,9 +51,9 @@ public class Bot implements IRCEventListener {
 
 		// TODO: Create storage
 		// Bot profile (nick)
+		ircServer = server;
+		channelName = channel;
 		con = new ConnectionManager(new Profile("Apri-rice"));
-		// Request Connection to server
-		con.requestConnection("irc.geekshed.net").addIRCEventListener(this);
 	}
 
 	/**
@@ -50,7 +63,7 @@ public class Bot implements IRCEventListener {
 		Type type = e.getType();
 		// Connection to server successful
 		if (type == Type.CONNECT_COMPLETE) {
-			e.getSession().join("#tinkernut_test_room");
+			e.getSession().join(channelName);
 
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
