@@ -31,16 +31,6 @@ public class Bot implements IRCEventListener, Runnable {
 	 * Class constructor
 	 */
 
-	public void run() {
-		// Request Connection to server
-		try {
-		con.requestConnection(ircServer).addIRCEventListener(this);
-		}
-		catch (Exception e) {
-			System.out.println("Failed to connect to channel. Exiting.");
-			return;
-		}
-	}
 	
 	public Bot(String server, String channel) {
 		// Initialize globals		
@@ -49,11 +39,23 @@ public class Bot implements IRCEventListener, Runnable {
 		commandsMap.put("help", new HelpCommand());
 		commandsMap.put("define", new DefineCommand());
 
-		// TODO: Create storage
-		// Bot profile (nick)
 		ircServer = server;
 		channelName = channel;
+		
+		// TODO: Create storage
+		// Bot profile (nick)
 		con = new ConnectionManager(new Profile("Apri-rice"));
+	}
+
+	public void run() {
+		// Request Connection to server
+		try {
+			con.requestConnection(ircServer).addIRCEventListener(this);
+		}
+		catch (Exception e) {
+			System.out.println("Failed to connect to channel. Exiting.");
+			return;
+		}
 	}
 
 	/**
