@@ -26,16 +26,13 @@ public class Bot implements IRCEventListener, Runnable {
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
 
-	Thread t1, t2;
+	Thread t1;
 	/**
 	 * Class constructor
 	 */
 	public Bot(String server, String channel) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
-		
-		commandsMap.put("help", new HelpCommand());
-		commandsMap.put("define", new DefineCommand());
 
 		ircServer = server;
 		channelName = channel;
@@ -78,20 +75,19 @@ public class Bot implements IRCEventListener, Runnable {
 
 			// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
-			MessageEvent me = (MessageEvent) e;
-
+			MessageEvent me = (MessageEvent) e; 
+			
 			// Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
+				
+				commandsMap.put("help", new HelpCommand(this, Parser.stripAguments(me.getMessage()), me));
+				commandsMap.put("define", new DefineCommand(this, Parser.stripAguments(me.getMessage()), me));
+				
 				if (commandsMap.containsKey(commandString)) {
-					
-					Command command = (commandsMap.get(commandString));
-					command.init(this, Parser.stripAguments(me.getMessage()), me);					
-					command.run();
-					
 					// TODO: Finish threading implementation
-					t1 = new Thread(command);
-					t2 = new Thread(command);
+					t1 = new Thread(commandsMap.get(commandString));
+					t1.start();
 				}
 				// TODO: Check for private message
 			}

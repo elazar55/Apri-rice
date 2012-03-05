@@ -16,6 +16,10 @@ import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
 public class DefineCommand extends Command {
+	public DefineCommand(Bot b, String s, MessageEvent m) {
+		super(b, s, m);
+	}
+
 	public void run() {
 		Map<String, String> urlMap = new HashMap<String, String>();
 		urlMap.put("urban", "http://www.urbandictionary.com/define.php?term=");

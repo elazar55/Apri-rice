@@ -9,7 +9,7 @@ public abstract class Command implements Runnable{
 	protected String params;
 	protected MessageEvent me;
 	
-	public void init(final Bot b, final String s, final MessageEvent m) {
+	public Command(final Bot b, final String s, final MessageEvent m) {
 		bot = b;
 		params = s;
 		me = m;
