@@ -30,8 +30,6 @@ public class Bot implements IRCEventListener, Runnable {
 	/**
 	 * Class constructor
 	 */
-
-	
 	public Bot(String server, String channel) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
