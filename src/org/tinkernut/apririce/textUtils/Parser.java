@@ -14,10 +14,14 @@ public class Parser {
 			return args.substring(args.indexOf(" ")+1);
 		}
 		else {
-			return "";
+			return "white";
 		}
 	}
 	public static String getFirstArgument(String args) {
-		return args.substring(0, args.indexOf(' '));
+		if (args.contains(" ")) {			
+			return args.substring(0, args.indexOf(' '));
+		}else {
+			return args;
+		}
 	}
 }

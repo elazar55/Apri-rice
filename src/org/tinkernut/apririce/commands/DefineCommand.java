@@ -19,47 +19,58 @@ public class DefineCommand implements Command {
 	Bot bot;
 	String params;
 	MessageEvent me;
-	
+	URLConnection urlConnection;
+
 	public DefineCommand(Bot b, String s, MessageEvent m) {
 		bot = b;
 		params = s;
 		me = m;
 	}
-	
+
 	public void run() {
 		Map<String, String> urlMap = new HashMap<String, String>();
+		Map<String, String> urbanProperties = new HashMap<String, String>();
+
+		urbanProperties.put("urban", "<div class=\"definition\">");
 		urlMap.put("urban", "http://www.urbandictionary.com/define.php?term=");
-		
-		if (urlMap.containsKey(Parser.getFirstArgument(params)) && Parser.stripAguments(params) != "") {
-			try {
-				//Establish connection and download HTML source
-				URLConnection urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params).replace(" ", "%20").replace(";", "%3B")).openConnection();
-				BufferedReader bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-				
-				//Put whole page source into a single line string
-				String HTMLSource = "";
-				
-				while((bReader.readLine()) != null) {
-					HTMLSource += bReader.readLine();
+
+		if (params.contains(" ")) {
+			if (urlMap.containsKey(Parser.getFirstArgument(params))) {
+				try {
+					//Establish connection and download HTML source
+					if (urlMap.get(Parser.getFirstArgument(params)).contains("=")) {					
+						urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params).replace(" ", "%20").replace(";", "%3B")).openConnection();
+					}else {					
+						urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params).replace(" ", "_")).openConnection();
+					}
+					BufferedReader bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+
+					//Put whole page source into a single line string
+					String HTMLSource = "";
+
+					while((bReader.readLine()) != null) {
+						HTMLSource += bReader.readLine();
+					}
+					HTMLSource = HTMLSource.replace("<br/>", " ");
+					HTMLSource = HTMLSource.replace("&quot;", "\"");
+					HTMLSource = HTMLSource.replace("\n\t", " ");
+					HTMLSource = HTMLSource.replace("  ", " ");
+
+					//Extract definition
+					//TODO: Abstract starting and ending index for definitions (i.e. Map sites to their corresponding HTML starting definition tags)
+					int start = HTMLSource.indexOf(urbanProperties.get(Parser.getFirstArgument(params)))+urbanProperties.get(Parser.getFirstArgument(params)).length();
+					int end = HTMLSource.indexOf("<", start);
+
+					String definition = HTMLSource.substring(start, end);
+					new TextBuffer().addAndDisplay(definition, me);
+				} catch (IOException e) {
+					new TextBuffer().addAndDisplay("Unable to establish connection.", me);
 				}
-				HTMLSource = HTMLSource.replace("<br/>", " ");
-				HTMLSource = HTMLSource.replace("&quot;", "\"");
-				HTMLSource = HTMLSource.replace("\n\t", " ");
-				HTMLSource = HTMLSource.replace("  ", " ");
-				
-				//Extract definition
-				//TODO: Abstract starting and ending index for definitions (i.e. Map sites to their corresponding HTML starting definition tags)
-				int start = HTMLSource.indexOf("<div class=\"definition\">")+"<div class=\"definition\">".length();
-				int end = HTMLSource.indexOf("<", start);
-				
-				String definition = HTMLSource.substring(start, end);
-				new TextBuffer().addAndDisplay(definition, me);
-			} catch (IOException e) {
-				new TextBuffer().addAndDisplay("Unable to establish connection.", me);
+			}else {
+				new TextBuffer().addAndDisplay("Invalid site.", me);
 			}
-		}
-		else {
-			new TextBuffer().addAndDisplay("Input something to define", me);
+		}else {
+			new TextBuffer().addAndDisplay("Input something to define.", me);
 		}
 	}
 
