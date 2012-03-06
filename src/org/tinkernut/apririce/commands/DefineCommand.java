@@ -15,11 +15,17 @@ import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
-public class DefineCommand extends Command {
+public class DefineCommand implements Command {
+	Bot bot;
+	String params;
+	MessageEvent me;
+	
 	public DefineCommand(Bot b, String s, MessageEvent m) {
-		super(b, s, m);
+		bot = b;
+		params = s;
+		me = m;
 	}
-
+	
 	public void run() {
 		Map<String, String> urlMap = new HashMap<String, String>();
 		urlMap.put("urban", "http://www.urbandictionary.com/define.php?term=");
@@ -57,7 +63,7 @@ public class DefineCommand extends Command {
 		}
 	}
 
-	protected void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me) {
+	public void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me) {
 
 	}
 }
