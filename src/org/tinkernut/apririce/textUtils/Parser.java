@@ -14,7 +14,7 @@ public class Parser {
 			return args.substring(args.indexOf(" ")+1);
 		}
 		else {
-			return "white";
+			return "";
 		}
 	}
 	public static String getFirstArgument(String args) {
