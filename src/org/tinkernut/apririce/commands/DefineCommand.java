@@ -4,6 +4,7 @@ package org.tinkernut.apririce.commands;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
@@ -12,38 +13,45 @@ import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
 import org.tinkernut.apririce.commands.Command;
+import org.tinkernut.apririce.commands.website.characterReplacement;
 import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
 public class DefineCommand implements Command {
-	Bot bot;
 	String params;
 	MessageEvent me;
 	URLConnection urlConnection;
 
-	public DefineCommand(Bot b, String s, MessageEvent m) {
-		bot = b;
-		params = s;
-		me = m;
+	public DefineCommand(String params, MessageEvent me) {
+		this.params = params;
+		this.me = me;
 	}
 
-	public void run() {
-		Map<String, String> urlMap = new HashMap<String, String>();
-		Map<String, String> urbanProperties = new HashMap<String, String>();
+	public void run() {		
+		Map<String, website> urlMap = new HashMap<String, website>();
+		try {
+			urlMap.put("urban", new website("<div class=\"definition\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
+		} catch (MalformedURLException e1) {
+			new TextBuffer().addAndDisplay("Malformed URL.", me);
+		}
 
-		urbanProperties.put("urban", "<div class=\"definition\">");
-		urlMap.put("urban", "http://www.urbandictionary.com/define.php?term=");
-
-		if (params.contains(" ")) {
-			if (urlMap.containsKey(Parser.getFirstArgument(params))) {
-				try {
-					//Establish connection and download HTML source
-					if (urlMap.get(Parser.getFirstArgument(params)).contains("=")) {					
-						urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params).replace(" ", "%20").replace(";", "%3B")).openConnection();
-					}else {					
-						urlConnection = new URL(urlMap.get(params.substring(0, params.indexOf(' ')))+Parser.stripAguments(params).replace(" ", "_")).openConnection();
+		if (params.contains(" ")) {			
+			try {
+				
+				if (urlMap.containsKey(Parser.getFirstArgument(params))) {
+					//Replace special characters in to be defined String
+					String urlAddon = Parser.stripAguments(params);
+					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
+						urlAddon = urlAddon.replace(" ", "%20");
 					}
+					
+					//Append definition String to url
+					urlMap.get(Parser.getFirstArgument(params)).url = new URL(urlMap.get(Parser.getFirstArgument(params)).url.toString() + urlAddon); 
+
+					//Establish connection and download HTML source
+					urlConnection = urlMap.get(Parser.getFirstArgument(params)).url.openConnection();
 					BufferedReader bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+					new TextBuffer().addAndDisplay("Connection successful.", me);
 
 					//Put whole page source into a single line string
 					String HTMLSource = "";
@@ -57,24 +65,41 @@ public class DefineCommand implements Command {
 					HTMLSource = HTMLSource.replace("  ", " ");
 
 					//Extract definition
-					//TODO: Abstract starting and ending index for definitions (i.e. Map sites to their corresponding HTML starting definition tags)
-					int start = HTMLSource.indexOf(urbanProperties.get(Parser.getFirstArgument(params)))+urbanProperties.get(Parser.getFirstArgument(params)).length();
+					int start = HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag) + urlMap.get(Parser.getFirstArgument(params)).startingTag.length();
 					int end = HTMLSource.indexOf("<", start);
 
 					String definition = HTMLSource.substring(start, end);
 					new TextBuffer().addAndDisplay(definition, me);
-				} catch (IOException e) {
-					new TextBuffer().addAndDisplay("Unable to establish connection.", me);
+				}else {
+					new TextBuffer().addAndDisplay("Invalid site.", me);
 				}
-			}else {
-				new TextBuffer().addAndDisplay("Invalid site.", me);
+			} catch (IOException e) {
+				new TextBuffer().addAndDisplay("Unable to establish connection.", me);
 			}
-		}else {
+		}else if(!urlMap.containsKey(Parser.getFirstArgument(params))){			
+			new TextBuffer().addAndDisplay("Invalid site.", me);
+		}else {			
 			new TextBuffer().addAndDisplay("Input something to define.", me);
 		}
 	}
 
 	public void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me) {
 
+	}
+}
+
+class website{
+	String startingTag;
+	characterReplacement charReplacement;
+
+	URL url;
+	public website(String startingTag, characterReplacement charReplacement, URL url) {
+		this.startingTag = startingTag;
+		this.charReplacement = charReplacement;
+		this.url = url;
+	}
+
+	public enum characterReplacement{
+		PERCENT, UNDERSCORE;
 	}
 }

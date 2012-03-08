@@ -82,7 +82,7 @@ public class Bot implements IRCEventListener, Runnable {
 				String commandString = Parser.stripCommand(me.getMessage());
 				
 				commandsMap.put("help", new HelpCommand(this, Parser.stripAguments(me.getMessage()), me));
-				commandsMap.put("define", new DefineCommand(this, Parser.stripAguments(me.getMessage()), me));
+				commandsMap.put("define", new DefineCommand(Parser.stripAguments(me.getMessage()), me));
 				
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
