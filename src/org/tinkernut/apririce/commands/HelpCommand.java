@@ -4,7 +4,13 @@ import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.User;
 
-public class HelpCommand extends Command {
+public class HelpCommand implements Command {
+	MessageEvent me;
+	
+	public HelpCommand(MessageEvent m) {
+		me = m;
+	}
+	
 	public void run() {
 		
 	}

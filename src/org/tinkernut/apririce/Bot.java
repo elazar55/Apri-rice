@@ -81,7 +81,7 @@ public class Bot implements IRCEventListener, Runnable {
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
 				
-				commandsMap.put("help", new HelpCommand(this, Parser.stripAguments(me.getMessage()), me));
+				commandsMap.put("help", new HelpCommand(me));
 				commandsMap.put("define", new DefineCommand(Parser.stripAguments(me.getMessage()), me));
 				
 				if (commandsMap.containsKey(commandString)) {
