@@ -32,7 +32,8 @@ public class DefineCommand implements Command {
 		try {
 			urlMap.put("urban", new website("<div class=\"definition\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
 		} catch (MalformedURLException e1) {
-			new TextBuffer().addAndDisplay("Malformed URL.", me);
+			new TextBuffer();
+			TextBuffer.addAndDisplay("Malformed URL.", me);
 		}
 
 		if (params.contains(" ")) {			
@@ -51,7 +52,7 @@ public class DefineCommand implements Command {
 					//Establish connection and download HTML source
 					urlConnection = urlMap.get(Parser.getFirstArgument(params)).url.openConnection();
 					BufferedReader bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-					new TextBuffer().addAndDisplay("Connection successful.", me);
+					TextBuffer.addAndDisplay("Connection successful.", me);
 
 					//Put whole page source into a single line string
 					String HTMLSource = "";
@@ -69,17 +70,22 @@ public class DefineCommand implements Command {
 					int end = HTMLSource.indexOf("<", start);
 
 					String definition = HTMLSource.substring(start, end);
-					new TextBuffer().addAndDisplay(definition, me);
+					new TextBuffer();
+					TextBuffer.addAndDisplay(definition, me);
 				}else {
-					new TextBuffer().addAndDisplay("Invalid site.", me);
+					new TextBuffer();
+					TextBuffer.addAndDisplay("Invalid site.", me);
 				}
 			} catch (IOException e) {
-				new TextBuffer().addAndDisplay("Unable to establish connection.", me);
+				new TextBuffer();
+				TextBuffer.addAndDisplay("Unable to establish connection.", me);
 			}
 		}else if(!urlMap.containsKey(Parser.getFirstArgument(params))){			
-			new TextBuffer().addAndDisplay("Invalid site.", me);
+			new TextBuffer();
+			TextBuffer.addAndDisplay("Invalid site.", me);
 		}else {			
-			new TextBuffer().addAndDisplay("Input something to define.", me);
+			new TextBuffer();
+			TextBuffer.addAndDisplay("Input something to define.", me);
 		}
 	}
 

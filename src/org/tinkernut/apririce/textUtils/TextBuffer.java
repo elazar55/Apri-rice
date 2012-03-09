@@ -4,21 +4,21 @@ import jerklib.events.MessageEvent;
 
 public class TextBuffer {
 
-	private String tBuffer = "";
+	private static String tBuffer = "";
 
-	public final void add(final String text) {
+	public static final void add(final String text) {
 		tBuffer += text;
 	}
-	public final void addAndDisplay(final String text, MessageEvent me) {
+	public static final void addAndDisplay(final String text, MessageEvent me) {
 		tBuffer += text;
 		display(me);
 	}
-	public final void addArray(final String[] textArray) {
+	public static final void addArray(final String[] textArray) {
 		for (int i = 0; i < textArray.length; i++) {
 			tBuffer += textArray[i] + " ";
 		}
 	}
-	public final void display(final MessageEvent me) {
+	public static final void display(final MessageEvent me) {
 		me.getChannel().say(tBuffer);
 		tBuffer = "";
 	}
