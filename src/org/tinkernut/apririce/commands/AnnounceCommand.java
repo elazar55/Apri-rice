@@ -1,5 +1,3 @@
-//TODO: Thread this!
-
 package org.tinkernut.apririce.commands;
 
 import java.util.Timer;
@@ -11,8 +9,8 @@ import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
 public class AnnounceCommand implements Command{
-	long interval;
-	String announcement;
+	int interval = 0;
+	String announcement = "";
 	String params;
 	MessageEvent me;
 	Timer timer;
@@ -23,10 +21,13 @@ public class AnnounceCommand implements Command{
 	}
 
 	public void run() {
-		if (Parser.getFirstArgument(params).equalsIgnoreCase("set")) {
+		//set argument
+		if (params.startsWith("set")) {
+			//check if required arguments are missing
 			if (Parser.stripAguments(params).equalsIgnoreCase("")) {
 				TextBuffer.addAndDisplay("Enter an interval or announcement to set.", me);
 			}
+			//set interval or announcement
 			else {
 				int number;
 				String words;
@@ -39,44 +40,43 @@ public class AnnounceCommand implements Command{
 				}
 			}
 		}
-		if (Parser.getFirstArgument(params).equalsIgnoreCase("start")) {
-			TextBuffer.addAndDisplay(this.announcement, me);
+		//start argument
+		if (params.startsWith("start")) {
+			start();
+		}
+		if (params.startsWith("stop")) {
+			timer.cancel();
+			TextBuffer.addAndDisplay("Announcement stopped.", me);
 		}
 	}
 	
 	public void set(int interval) {
 		this.interval = interval*1000;
-		TextBuffer.addAndDisplay("Interval succsessfuly set to " + interval + " seconds", me);
+		TextBuffer.addAndDisplay("Interval succsessfuly set to: " + interval + " seconds", me);
 	}
 	
 	public void set(String announcment) {
 		this.announcement = announcment;
-		TextBuffer.addAndDisplay("Announcement succsessfuly set to " + this.announcement, me);
+		TextBuffer.addAndDisplay("Announcement succsessfuly set to: " + this.announcement, me);
 	}
 	
 	public void start() {
-		timer = new Timer();
-		timer.schedule(new task(me, announcement), interval);
+		if (interval == 0) {
+			TextBuffer.addAndDisplay("Set an interval in seconds. |announce set <interval here(eg. 100, 300, 134, etc,.)>", me);
+		}else if (announcement.equals("")) {
+			TextBuffer.addAndDisplay("Set an announcement. |announce set <message here>", me);
+		}else {			
+			timer = new Timer();
+			timer.scheduleAtFixedRate(new TimerTask() {
+				public void run() {
+					TextBuffer.addAndDisplay(announcement, me);
+				}
+			}, 0, interval);
+		}
+		
 	}
 
 	public void execPriv(Bot bot, User sender, String params, MessageEvent me) {
 		
-	}
-
-
-}
-
-class task extends TimerTask{
-	
-	MessageEvent me;
-	String announcement;
-	
-	public task(MessageEvent me, String announcement) {
-		this.me = me;
-		this.announcement = announcement;
-	}
-
-	public void run() {
-		TextBuffer.addAndDisplay(announcement, me);
 	}
 }

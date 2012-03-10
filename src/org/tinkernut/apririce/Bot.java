@@ -27,6 +27,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
+	//Global instance commands
 	private Command announceCommand;
 
 	Thread t1;
@@ -86,9 +87,11 @@ public class Bot implements IRCEventListener, Runnable {
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
 
+				//Local instance commands
 				Command helpCommand = new HelpCommand();
 				Command defineCommand = new DefineCommand();
 
+				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("define", defineCommand);
 				commandsMap.put("announce", announceCommand);
