@@ -22,7 +22,7 @@ public class DefineCommand implements Command {
 	MessageEvent me;
 	URLConnection urlConnection;
 
-	public DefineCommand(String params, MessageEvent me) {
+	public void init(String params, MessageEvent me) {
 		this.params = params;
 		this.me = me;
 	}

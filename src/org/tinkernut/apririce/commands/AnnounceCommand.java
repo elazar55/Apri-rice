@@ -16,8 +16,8 @@ public class AnnounceCommand implements Command{
 	String params;
 	MessageEvent me;
 	Timer timer;
-	
-	public AnnounceCommand(MessageEvent me, String params) {
+
+	public void init(String params, MessageEvent me) {
 		this.params = params;
 		this.me = me;
 	}
@@ -62,6 +62,7 @@ public class AnnounceCommand implements Command{
 	public void execPriv(Bot bot, User sender, String params, MessageEvent me) {
 		
 	}
+
 
 }
 

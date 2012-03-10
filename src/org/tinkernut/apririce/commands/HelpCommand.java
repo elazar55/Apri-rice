@@ -8,8 +8,8 @@ import org.tinkernut.apririce.textUtils.TextBuffer;
 public class HelpCommand implements Command {
 	MessageEvent me;
 	
-	public HelpCommand(MessageEvent m) {
-		me = m;
+	public void init(String params, MessageEvent me) {
+		this.me = me;
 	}
 	
 	public void run() {

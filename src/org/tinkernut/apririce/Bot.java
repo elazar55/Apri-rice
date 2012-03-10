@@ -27,6 +27,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
+	private Command announceCommand;
 
 	Thread t1;
 	/**
@@ -35,15 +36,17 @@ public class Bot implements IRCEventListener, Runnable {
 	public Bot(String server, String channel) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
+		announceCommand = new AnnounceCommand();
 
 		ircServer = server;
 		channelName = channel;
-		
+
 		// TODO: Create storage
 		// Bot profile (nick)
 		con = new ConnectionManager(new Profile("Apri-rice"));
 	}
 
+	//Thread start
 	public void run() {
 		// Request Connection to server
 		try {
@@ -78,17 +81,22 @@ public class Bot implements IRCEventListener, Runnable {
 			// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			MessageEvent me = (MessageEvent) e; 
-			
+
 			// Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
-				
-				commandsMap.put("help", new HelpCommand(me));
-				commandsMap.put("define", new DefineCommand(Parser.stripAguments(me.getMessage()), me));
-				commandsMap.put("announce", new AnnounceCommand(me, Parser.stripAguments(me.getMessage())));
-				
+
+				Command helpCommand = new HelpCommand();
+				Command defineCommand = new DefineCommand();
+
+				commandsMap.put("help", helpCommand);
+				commandsMap.put("define", defineCommand);
+				commandsMap.put("announce", announceCommand);
+
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
+					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me);
+
 					t1 = new Thread(commandsMap.get(commandString));
 					t1.start();
 				}
