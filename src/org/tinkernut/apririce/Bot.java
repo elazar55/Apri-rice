@@ -3,6 +3,8 @@
 package org.tinkernut.apririce;
 
 import java.util.HashMap;
+
+import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
@@ -83,6 +85,7 @@ public class Bot implements IRCEventListener, Runnable {
 				
 				commandsMap.put("help", new HelpCommand(me));
 				commandsMap.put("define", new DefineCommand(Parser.stripAguments(me.getMessage()), me));
+				commandsMap.put("announce", new AnnounceCommand(me, Parser.stripAguments(me.getMessage())));
 				
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
