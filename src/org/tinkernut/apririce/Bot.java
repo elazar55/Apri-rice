@@ -8,6 +8,7 @@ import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
+import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -90,11 +91,13 @@ public class Bot implements IRCEventListener, Runnable {
 				//Local instance commands
 				Command helpCommand = new HelpCommand();
 				Command defineCommand = new DefineCommand();
+				Command nickServCommand = new NickServCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("define", defineCommand);
 				commandsMap.put("announce", announceCommand);
+				commandsMap.put("nickserv", nickServCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
