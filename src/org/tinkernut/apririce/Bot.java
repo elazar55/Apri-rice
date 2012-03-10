@@ -10,6 +10,8 @@ import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.textUtils.Parser;
+import org.tinkernut.apririce.textUtils.TextBuffer;
+
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
@@ -31,7 +33,7 @@ public class Bot implements IRCEventListener, Runnable {
 	//Global instance commands
 	private Command announceCommand;
 
-	Thread t1;
+	Thread publicT1, privateT1;
 	/**
 	 * Class constructor
 	 */
@@ -91,22 +93,43 @@ public class Bot implements IRCEventListener, Runnable {
 				//Local instance commands
 				Command helpCommand = new HelpCommand();
 				Command defineCommand = new DefineCommand();
-				Command nickServCommand = new NickServCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("define", defineCommand);
 				commandsMap.put("announce", announceCommand);
+
+				if (commandsMap.containsKey(commandString)) {
+					// TODO: Finish threading implementation
+					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me);
+
+					publicT1 = new Thread(commandsMap.get(commandString));
+					publicT1.start();
+				}
+			}
+			// Private message successfuly recieved
+			// TODO: Fix private messaging
+		} else if (type == Type.PRIVATE_MESSAGE) {
+			MessageEvent me = (MessageEvent) e;
+			if (me.getMessage().startsWith(CMD_START)) {			
+				// Check and execute any commands
+				String commandString = Parser.stripCommand(me.getMessage());
+
+				//Local instance commands
+				Command nickServCommand = new NickServCommand();
+
+				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
 					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me);
 
-					t1 = new Thread(commandsMap.get(commandString));
-					t1.start();
+					commandsMap.get(commandString).execPriv(me.getNick());
 				}
-				// TODO: Check for private message
+				else {
+					me.getSession().sayPrivate(me.getNick(), "Not a command.");
+				}
 			}
 		}
 	}

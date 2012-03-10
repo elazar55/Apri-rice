@@ -10,8 +10,6 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import jerklib.events.MessageEvent;
-import org.tinkernut.apririce.Bot;
-import org.tinkernut.apririce.User;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.website.characterReplacement;
 import org.tinkernut.apririce.textUtils.Parser;
@@ -89,7 +87,7 @@ public class DefineCommand implements Command {
 		}
 	}
 
-	public void execPriv(final Bot bot, final User sender, final String params, final MessageEvent me) {
+	public void execPriv(String user) {
 
 	}
 }
