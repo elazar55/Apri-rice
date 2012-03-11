@@ -1,7 +1,7 @@
 package org.tinkernut.apririce.commands;
 
-import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.textUtils.Parser;
+import jerklib.events.MessageEvent;
 
 public class NickServCommand implements Command {
 	String params;
@@ -16,8 +16,14 @@ public class NickServCommand implements Command {
 	}
 
 	public void execPriv(String user) {
-		if (params.startsWith("register")) {
-			me.getSession().sayPrivate("nickserv", "register" + Parser.stripAguments(params));
-		}		
+		if (params.startsWith("identify")) {
+			me.getSession().sayPrivate("nickserv", "identify " + Parser.stripAguments(params));
+		}else if (params.startsWith("register")) {
+			me.getSession().sayPrivate("nickserv", "register " + Parser.stripAguments(params));
+		}else if (params.startsWith("group")) {
+			me.getSession().sayPrivate("nickserv", "group " + Parser.stripAguments(params));
+		}else {
+			System.out.println("Invalid arguments.");
+		}
 	}
 }
