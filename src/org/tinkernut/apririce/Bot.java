@@ -10,8 +10,6 @@ import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.textUtils.Parser;
-import org.tinkernut.apririce.textUtils.TextBuffer;
-
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
@@ -65,6 +63,8 @@ public class Bot implements IRCEventListener, Runnable {
 	 * Event handler
 	 */
 	public void receiveEvent(IRCEvent e) {
+		System.out.println(e.getRawEventData());
+		
 		Type type = e.getType();
 		// Connection to server successful
 		if (type == Type.CONNECT_COMPLETE) {
