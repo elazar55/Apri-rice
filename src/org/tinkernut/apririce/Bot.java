@@ -24,7 +24,7 @@ public class Bot implements IRCEventListener, Runnable {
 	 * Globals
 	 */
 	private String ircServer;
-	private String channelName;
+	public String channelName;
 	private ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
 	private final String CMD_START = "|";
