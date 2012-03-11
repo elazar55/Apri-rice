@@ -10,6 +10,8 @@ import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
 import jerklib.events.MessageEvent;
+
+import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.website.characterReplacement;
 import org.tinkernut.apririce.textUtils.Parser;
@@ -20,7 +22,7 @@ public class DefineCommand implements Command {
 	MessageEvent me;
 	URLConnection urlConnection;
 
-	public void init(String params, MessageEvent me) {
+	public void init(String params, MessageEvent me, Bot bot) {
 		this.params = params;
 		this.me = me;
 	}

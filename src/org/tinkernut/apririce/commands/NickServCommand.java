@@ -1,5 +1,6 @@
 package org.tinkernut.apririce.commands;
 
+import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.events.MessageEvent;
 
@@ -7,7 +8,7 @@ public class NickServCommand implements Command {
 	String params;
 	MessageEvent me;
 
-	public void init(String params, MessageEvent me) {
+	public void init(String params, MessageEvent me, Bot bot) {
 		this.params = params;
 		this.me = me;
 	}

@@ -3,6 +3,8 @@ package org.tinkernut.apririce.commands;
 import java.util.Timer;
 import java.util.TimerTask;
 import jerklib.events.MessageEvent;
+
+import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
@@ -13,7 +15,7 @@ public class AnnounceCommand implements Command{
 	MessageEvent me;
 	Timer timer;
 
-	public void init(String params, MessageEvent me) {
+	public void init(String params, MessageEvent me, Bot bot) {
 		this.params = params;
 		this.me = me;
 	}

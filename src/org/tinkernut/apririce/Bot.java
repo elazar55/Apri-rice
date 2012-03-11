@@ -101,7 +101,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
-					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me);
+					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me, this);
 
 					publicT1 = new Thread(commandsMap.get(commandString));
 					publicT1.start();
@@ -123,7 +123,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
-					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me);
+					commandsMap.get(commandString).init(Parser.stripAguments(me.getMessage()), me, this);
 
 					commandsMap.get(commandString).execPriv(me.getNick());
 				}
