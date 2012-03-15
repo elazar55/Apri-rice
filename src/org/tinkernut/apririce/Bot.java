@@ -2,12 +2,15 @@
 
 package org.tinkernut.apririce;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
-
 import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
+import org.tinkernut.apririce.commands.LogCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
@@ -23,13 +26,16 @@ public class Bot implements IRCEventListener, Runnable {
 	/**
 	 * Globals
 	 */
-	private String ircServer;
 	public String channelName;
+	public boolean isLogging = false;
+	private final String CMD_START = "|";
+	private String ircServer;
 	private ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
-	private final String CMD_START = "|";
+	private BufferedWriter bLogWriter;
 	//Global instance commands
 	private Command announceCommand;
+	Command logCommand;
 
 	Thread publicT1, privateT1;
 	/**
@@ -38,7 +44,9 @@ public class Bot implements IRCEventListener, Runnable {
 	public Bot(String server, String channel) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
+		
 		announceCommand = new AnnounceCommand();
+		logCommand = new LogCommand();
 
 		ircServer = server;
 		channelName = channel;
@@ -64,7 +72,7 @@ public class Bot implements IRCEventListener, Runnable {
 	 */
 	public void receiveEvent(IRCEvent e) {
 		System.out.println(e.getRawEventData());
-		
+
 		Type type = e.getType();
 		// Connection to server successful
 		if (type == Type.CONNECT_COMPLETE) {
@@ -84,8 +92,18 @@ public class Bot implements IRCEventListener, Runnable {
 
 			// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
-			MessageEvent me = (MessageEvent) e; 
-
+			if (isLogging) {
+				try {
+					bLogWriter = new BufferedWriter(new FileWriter("log.txt", true));
+					bLogWriter.write(e.getRawEventData());
+					bLogWriter.newLine();
+					bLogWriter.close();
+				} catch (IOException e1) {
+					System.out.println("Error. Could not open log file.");
+				}
+			}
+			
+			MessageEvent me = (MessageEvent) e;
 			// Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
@@ -98,6 +116,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("define", defineCommand);
 				commandsMap.put("announce", announceCommand);
+				commandsMap.put("log", logCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
@@ -108,7 +127,6 @@ public class Bot implements IRCEventListener, Runnable {
 				}
 			}
 			// Private message successfuly recieved
-			// TODO: Fix private messaging
 		} else if (type == Type.PRIVATE_MESSAGE) {
 			MessageEvent me = (MessageEvent) e;
 			if (me.getMessage().startsWith(CMD_START)) {			
