@@ -24,7 +24,7 @@ public class AnnounceCommand implements Command{
 		//set argument
 		if (params.startsWith("set")) {
 			//check if required arguments are missing
-			if (Parser.stripAguments(params).equalsIgnoreCase("")) {
+			if (Parser.stripArguments(params).equalsIgnoreCase("")) {
 				TextBuffer.addAndDisplay("Enter an interval or announcement to set.", me);
 			}
 			//set interval or announcement
@@ -32,10 +32,10 @@ public class AnnounceCommand implements Command{
 				int number;
 				String words;
 				try {
-					number = Integer.parseInt(Parser.stripAguments(params));
+					number = Integer.parseInt(Parser.stripArguments(params));
 					set(number);
 				} catch (NumberFormatException e) {
-					words = Parser.stripAguments(params);
+					words = Parser.stripArguments(params);
 					set(words);
 				}
 			}

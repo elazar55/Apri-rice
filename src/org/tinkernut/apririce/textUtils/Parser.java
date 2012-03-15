@@ -9,7 +9,7 @@ public class Parser {
 			return cmd.substring(1);
 		}
 	}
-	public static String stripAguments(String args) {
+	public static String stripArguments(String args) {
 		if (args.contains(" ")) {
 			return args.substring(args.indexOf(" ")+1);
 		}

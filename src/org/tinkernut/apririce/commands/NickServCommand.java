@@ -22,11 +22,11 @@ public class NickServCommand implements Command {
 
 	public void execPriv(String user) {
 		if (params.startsWith("identify")) {
-			me.getSession().sayPrivate("nickserv", "identify " + Parser.stripAguments(params));
+			me.getSession().sayPrivate("nickserv", "identify " + Parser.stripArguments(params));
 		}else if (params.startsWith("register")) {
-			me.getSession().sayPrivate("nickserv", "register " + Parser.stripAguments(params));
+			me.getSession().sayPrivate("nickserv", "register " + Parser.stripArguments(params));
 		}else if (params.startsWith("group")) {
-			me.getSession().sayPrivate("nickserv", "group " + Parser.stripAguments(params));
+			me.getSession().sayPrivate("nickserv", "group " + Parser.stripArguments(params));
 		}else {
 			System.out.println("Invalid arguments.");
 			me.getSession().sayPrivate(me.getNick(), "Invalid arguments.");

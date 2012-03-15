@@ -41,7 +41,7 @@ public class DefineCommand implements Command {
 				
 				if (urlMap.containsKey(Parser.getFirstArgument(params))) {
 					//Replace special characters in to be defined String
-					String urlAddon = Parser.stripAguments(params);
+					String urlAddon = Parser.stripArguments(params);
 					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
 					}
