@@ -34,6 +34,7 @@ public class Bot implements IRCEventListener, Runnable {
 	public ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
 	private BufferedWriter bLogWriter;
+	private String botName;
 	//Global instance commands
 	private Command announceCommand;
 
@@ -41,7 +42,7 @@ public class Bot implements IRCEventListener, Runnable {
 	/**
 	 * Class constructor
 	 */
-	public Bot(String server, String channel) {
+	public Bot(String server, String channel, String botName) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
 		
@@ -49,10 +50,11 @@ public class Bot implements IRCEventListener, Runnable {
 
 		ircServer = server;
 		channelName = channel;
+		this.botName = botName;
 
 		// TODO: Create storage
 		// Bot profile (nick)
-		con = new ConnectionManager(new Profile("Apri-rice"));
+		con = new ConnectionManager(new Profile(botName));
 	}
 
 	//Thread start
