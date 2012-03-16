@@ -12,6 +12,7 @@ import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.LogCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
+import org.tinkernut.apririce.commands.QuitCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -110,12 +111,14 @@ public class Bot implements IRCEventListener, Runnable {
 				Command helpCommand = new HelpCommand();
 				Command defineCommand = new DefineCommand();
 				Command logCommand = new LogCommand();
+				Command quitCommand = new QuitCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("define", defineCommand);
 				commandsMap.put("announce", announceCommand);
 				commandsMap.put("log", logCommand);
+				commandsMap.put("quit", quitCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
@@ -138,11 +141,13 @@ public class Bot implements IRCEventListener, Runnable {
 				Command helpCommand = new HelpCommand();
 				Command nickServCommand = new NickServCommand();
 				Command logCommand = new LogCommand();
+				Command quitCommand = new QuitCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
 				commandsMap.put("log", logCommand);
 				commandsMap.put("help", helpCommand);
+				commandsMap.put("quit", quitCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
