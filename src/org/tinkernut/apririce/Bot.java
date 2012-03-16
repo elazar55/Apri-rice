@@ -30,7 +30,7 @@ public class Bot implements IRCEventListener, Runnable {
 	public boolean isLogging = false;
 	private final String CMD_START = "|";
 	private String ircServer;
-	private ConnectionManager con;
+	public ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
 	private BufferedWriter bLogWriter;
 	//Global instance commands
