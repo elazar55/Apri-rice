@@ -64,10 +64,11 @@ public class DefineCommand implements Command {
 
 					//Put whole page source into a single line string
 					String HTMLSource = "";
-
-					while((bReader.readLine()) != null) {
+					
+					while (!HTMLSource.contains("</html>")) {
 						HTMLSource += bReader.readLine();
 					}
+					
 					HTMLSource = HTMLSource.replace("<br/>", " ");
 					HTMLSource = HTMLSource.replace("&quot;", "\"");
 					HTMLSource = HTMLSource.replace("\n\t", " ");
