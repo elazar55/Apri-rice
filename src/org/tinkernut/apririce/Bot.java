@@ -123,6 +123,8 @@ public class Bot implements IRCEventListener, Runnable {
 
 					publicT1 = new Thread(commandsMap.get(commandString));
 					publicT1.start();
+				}else {
+					me.getChannel().say("Not a command.");
 				}
 			}
 			// Private message successfuly recieved
