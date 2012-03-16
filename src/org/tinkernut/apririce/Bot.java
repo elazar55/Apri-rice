@@ -138,12 +138,12 @@ public class Bot implements IRCEventListener, Runnable {
 
 				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
+				commandsMap.put("log", logCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
-
-					commandsMap.get(commandString).execPriv(me.getNick());
+					commandsMap.get(commandString).execPriv();
 				}
 				else {
 					me.getSession().sayPrivate(me.getNick(), "Not a command.");

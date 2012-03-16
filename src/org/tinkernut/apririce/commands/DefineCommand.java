@@ -89,7 +89,7 @@ public class DefineCommand implements Command {
 		}
 	}
 
-	public void execPriv(String user) {
+	public void execPriv() {
 
 	}
 }

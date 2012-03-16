@@ -20,7 +20,7 @@ public class NickServCommand implements Command {
 	public void run() {
 	}
 
-	public void execPriv(String user) {
+	public void execPriv() {
 		if (params.startsWith("identify")) {
 			me.getSession().sayPrivate("nickserv", "identify " + Parser.stripArguments(params));
 		}else if (params.startsWith("register")) {

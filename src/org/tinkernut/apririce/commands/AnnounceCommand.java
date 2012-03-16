@@ -76,7 +76,7 @@ public class AnnounceCommand implements Command{
 		
 	}
 
-	public void execPriv(String user) {
+	public void execPriv() {
 		
 	}
 }

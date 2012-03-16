@@ -9,5 +9,5 @@ public interface Command extends Runnable{
 	
 	void run();
 
-	void execPriv(String user);
+	void execPriv();
 }

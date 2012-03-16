@@ -17,7 +17,7 @@ public class HelpCommand implements Command {
 		TextBuffer.addAndDisplay("I'm sorry Dave, I'm afraid I can't let you do that.", me);
 	}
 	
-	public void execPriv(String user) {
+	public void execPriv() {
 
 	}
 }

@@ -35,8 +35,24 @@ public class LogCommand  implements Command{
 		}
 	}
 
-	public void execPriv(String user) {
-		
+	public void execPriv() {
+		if (params.startsWith("start")) {
+			if (!bot.isLogging) {
+				me.getSession().sayPrivate(me.getNick(), "Logging started.");
+				bot.isLogging = true;
+			}else {
+				me.getSession().sayPrivate(me.getNick(), "Logging is already initiated.");
+			}
+		}else if (params.startsWith("stop")) {
+			if (bot.isLogging) {
+				me.getSession().sayPrivate(me.getNick(), "Logging stopped.");
+				bot.isLogging = false;				
+			}else {				
+				me.getSession().sayPrivate(me.getNick(), "Logging is already not running.");
+			}
+		}else {
+			me.getSession().sayPrivate(me.getNick(), "Invalid option.");
+		}
 	}
 
 }
