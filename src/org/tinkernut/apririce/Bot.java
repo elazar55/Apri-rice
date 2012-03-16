@@ -35,7 +35,6 @@ public class Bot implements IRCEventListener, Runnable {
 	private BufferedWriter bLogWriter;
 	//Global instance commands
 	private Command announceCommand;
-	Command logCommand;
 
 	Thread publicT1, privateT1;
 	/**
@@ -46,7 +45,6 @@ public class Bot implements IRCEventListener, Runnable {
 		commandsMap = new HashMap<String, Command>();
 		
 		announceCommand = new AnnounceCommand();
-		logCommand = new LogCommand();
 
 		ircServer = server;
 		channelName = channel;
@@ -111,6 +109,7 @@ public class Bot implements IRCEventListener, Runnable {
 				//Local instance commands
 				Command helpCommand = new HelpCommand();
 				Command defineCommand = new DefineCommand();
+				Command logCommand = new LogCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
@@ -135,6 +134,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 				//Local instance commands
 				Command nickServCommand = new NickServCommand();
+				Command logCommand = new LogCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
