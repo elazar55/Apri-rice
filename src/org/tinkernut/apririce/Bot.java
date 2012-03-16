@@ -6,6 +6,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
@@ -38,7 +41,9 @@ public class Bot implements IRCEventListener, Runnable {
 	//Global instance commands
 	private Command announceCommand;
 
-	Thread publicT1, privateT1;
+	ExecutorService privateExecutorService = Executors.newCachedThreadPool();
+	ExecutorService publicExecutorService = Executors.newCachedThreadPool();	
+	
 	/**
 	 * Class constructor
 	 */
@@ -54,7 +59,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 		// TODO: Create storage
 		// Bot profile (nick)
-		con = new ConnectionManager(new Profile(botName));
+		con = new ConnectionManager(new Profile(this.botName));
 	}
 
 	//Thread start
@@ -126,8 +131,7 @@ public class Bot implements IRCEventListener, Runnable {
 					// TODO: Finish threading implementation
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
 
-					publicT1 = new Thread(commandsMap.get(commandString));
-					publicT1.start();
+					publicExecutorService.execute(commandsMap.get(commandString));
 				}else {
 					me.getChannel().say("Not a command.");
 				}
@@ -155,8 +159,7 @@ public class Bot implements IRCEventListener, Runnable {
 					// TODO: Finish threading implementation
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
 					
-					privateT1 = new Thread(commandsMap.get(commandString));
-					privateT1.start();
+					privateExecutorService.execute(commandsMap.get(commandString));
 				}
 				else {
 					me.getSession().sayPrivate(me.getNick(), "Not a command.");
