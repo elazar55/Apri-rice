@@ -8,6 +8,8 @@ public interface Command extends Runnable{
 	void init(String params, MessageEvent me, Bot bot);
 	
 	void run();
+	
+	void exec();
 
 	void execPriv();
 }

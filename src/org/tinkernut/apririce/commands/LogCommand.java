@@ -14,8 +14,16 @@ public class LogCommand  implements Command{
 		this.params = params;
 		this.me = me;
 	}
-
+	
 	public void run() {
+		if (me.getChannel() == null) {
+			execPriv();
+		}else {
+			exec();
+		}
+	}
+
+	public void exec() {
 		if (params.startsWith("start")) {
 			if (!bot.isLogging) {
 				TextBuffer.addAndDisplay("Logging started", me);
@@ -54,5 +62,4 @@ public class LogCommand  implements Command{
 			me.getSession().sayPrivate(me.getNick(), "Invalid option.");
 		}
 	}
-
 }

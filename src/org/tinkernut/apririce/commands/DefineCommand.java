@@ -26,8 +26,16 @@ public class DefineCommand implements Command {
 		this.params = params;
 		this.me = me;
 	}
+	
+	public void run() {
+		if (me.getChannel() == null) {
+			execPriv();
+		}else {
+			exec();
+		}
+	}
 
-	public void run() {		
+	public void exec() {		
 		Map<String, website> urlMap = new HashMap<String, website>();
 		try {
 			urlMap.put("urban", new website("<div class=\"definition\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));

@@ -21,6 +21,14 @@ public class AnnounceCommand implements Command{
 	}
 
 	public void run() {
+		if (me.getChannel() == null) {
+			execPriv();
+		}else {
+			exec();
+		}
+	}
+
+	public void exec() {
 		//set argument
 		if (params.startsWith("set")) {
 			//check if required arguments are missing
@@ -48,18 +56,23 @@ public class AnnounceCommand implements Command{
 			timer.cancel();
 			TextBuffer.addAndDisplay("Announcement stopped.", me);
 		}
+
 	}
-	
+
+	public void execPriv() {
+		
+	}
+
 	public void set(int interval) {
 		this.interval = interval*1000;
 		TextBuffer.addAndDisplay("Interval succsessfuly set to: " + interval + " seconds", me);
 	}
-	
+
 	public void set(String announcment) {
 		this.announcement = announcment;
 		TextBuffer.addAndDisplay("Announcement succsessfuly set to: " + this.announcement, me);
 	}
-	
+
 	public void start() {
 		if (interval == 0) {
 			TextBuffer.addAndDisplay("Set an interval in seconds. |announce set <interval here(eg. 100, 300, 134, etc,.)>", me);
@@ -73,10 +86,7 @@ public class AnnounceCommand implements Command{
 				}
 			}, 0, interval);
 		}
-		
+
 	}
 
-	public void execPriv() {
-		
-	}
 }

@@ -135,17 +135,19 @@ public class Bot implements IRCEventListener, Runnable {
 				String commandString = Parser.stripCommand(me.getMessage());
 
 				//Local instance commands
+				Command helpCommand = new HelpCommand();
 				Command nickServCommand = new NickServCommand();
 				Command logCommand = new LogCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
 				commandsMap.put("log", logCommand);
+				commandsMap.put("help", helpCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
-					commandsMap.get(commandString).execPriv();
+					commandsMap.get(commandString).run();
 				}
 				else {
 					me.getSession().sayPrivate(me.getNick(), "Not a command.");

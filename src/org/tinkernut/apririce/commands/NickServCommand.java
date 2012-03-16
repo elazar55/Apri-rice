@@ -2,7 +2,6 @@ package org.tinkernut.apririce.commands;
 
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.textUtils.Parser;
-
 import jerklib.Channel;
 import jerklib.events.MessageEvent;
 
@@ -16,8 +15,17 @@ public class NickServCommand implements Command {
 		this.me = me;
 		this.bot = bot;
 	}
-
+	
 	public void run() {
+		if (me.getChannel() == null) {
+			execPriv();
+		}else {
+			exec();
+		}
+	}
+	
+	public void exec() {
+		
 	}
 
 	public void execPriv() {
@@ -33,4 +41,5 @@ public class NickServCommand implements Command {
 			me.getSession().sayChannel(new Channel(bot.channelName, me.getSession()), "Invalid arguments.");
 		}
 	}
+
 }

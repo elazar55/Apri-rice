@@ -3,7 +3,6 @@ package org.tinkernut.apririce.commands;
 import jerklib.events.MessageEvent;
 
 import org.tinkernut.apririce.Bot;
-import org.tinkernut.apririce.textUtils.TextBuffer;
 
 public class HelpCommand implements Command {
 	MessageEvent me;
@@ -13,11 +12,18 @@ public class HelpCommand implements Command {
 	}
 	
 	public void run() {
-		//TODO: something
-		TextBuffer.addAndDisplay("I'm sorry Dave, I'm afraid I can't let you do that.", me);
+		if (me.getChannel() == null) {
+			execPriv();
+		}else {
+			exec();
+		}
 	}
 	
-	public void execPriv() {
+	public void exec() {
+		System.out.println("This is the public secotr!");
+	}
 
+	public void execPriv() {
+		System.out.println("This is the private secotr!");
 	}
 }
