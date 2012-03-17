@@ -39,8 +39,6 @@ public class Bot implements IRCEventListener, Runnable {
 	private BufferedWriter bLogWriter;
 	private String botName;
 	private ArrayList<User> userList;
-	private boolean isPublicDefined = false;
-	private boolean isPrivateDefined = false;
 	//Global instance commands
 	private Command announceCommand;
 
@@ -121,8 +119,7 @@ public class Bot implements IRCEventListener, Runnable {
 			// Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
-				
-				if (!isPublicDefined) {					
+								
 					//Local instance commands
 					Command helpCommand = new HelpCommand();
 					Command defineCommand = new DefineCommand();
@@ -135,9 +132,6 @@ public class Bot implements IRCEventListener, Runnable {
 					commandsMap.put("announce", announceCommand);
 					commandsMap.put("log", logCommand);
 					commandsMap.put("quit", quitCommand);
-					
-					isPublicDefined = true;
-				}
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
@@ -154,8 +148,7 @@ public class Bot implements IRCEventListener, Runnable {
 			if (me.getMessage().startsWith(CMD_START)) {			
 				// Check and execute any commands
 				String commandString = Parser.stripCommand(me.getMessage());
-
-				if (!isPrivateDefined) {					
+					
 					//Local instance commands
 					Command helpCommand = new HelpCommand();
 					Command nickServCommand = new NickServCommand();
@@ -167,9 +160,6 @@ public class Bot implements IRCEventListener, Runnable {
 					commandsMap.put("log", logCommand);
 					commandsMap.put("help", helpCommand);
 					commandsMap.put("quit", quitCommand);
-					
-					isPrivateDefined = true;
-				}
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
