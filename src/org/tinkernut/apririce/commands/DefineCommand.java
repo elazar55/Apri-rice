@@ -9,31 +9,13 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
-import jerklib.events.MessageEvent;
-
-import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.website.characterReplacement;
 import org.tinkernut.apririce.textUtils.Parser;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
-public class DefineCommand implements Command {
-	String params;
-	MessageEvent me;
+public class DefineCommand extends Command {
 	URLConnection urlConnection;
-
-	public void init(String params, MessageEvent me, Bot bot) {
-		this.params = params;
-		this.me = me;
-	}
-	
-	public void run() {
-		if (me.getChannel() == null) {
-			execPriv();
-		}else {
-			exec();
-		}
-	}
 
 	public void exec() {		
 		Map<String, website> urlMap = new HashMap<String, website>();

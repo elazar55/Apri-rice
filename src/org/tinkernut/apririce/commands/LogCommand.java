@@ -4,23 +4,13 @@ import jerklib.events.MessageEvent;
 import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.textUtils.TextBuffer;
 
-public class LogCommand  implements Command{
+public class LogCommand  extends Command{
 	Bot bot;
-	String params;
-	MessageEvent me;
 
+	@Override
 	public void init(String params, MessageEvent me, Bot bot) {
+		super.init(params, me, bot);
 		this.bot = bot;
-		this.params = params;
-		this.me = me;
-	}
-	
-	public void run() {
-		if (me.getChannel() == null) {
-			execPriv();
-		}else {
-			exec();
-		}
 	}
 
 	public void exec() {

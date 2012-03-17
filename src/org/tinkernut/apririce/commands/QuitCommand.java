@@ -4,22 +4,12 @@ import jerklib.events.MessageEvent;
 
 import org.tinkernut.apririce.Bot;
 
-public class QuitCommand implements Command {
-	
-	MessageEvent me;
+public class QuitCommand extends Command {
 	Bot bot;
 
 	public void init(String params, MessageEvent me, Bot bot) {
-		this.me = me;
+		super.init(params, me, bot);
 		this.bot = bot;
-	}
-
-	public void run() {
-		if (me.getChannel() == null) {
-			exec();
-		} else {
-			execPriv();
-		}
 	}
 
 	public void exec() {

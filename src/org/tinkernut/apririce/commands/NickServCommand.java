@@ -5,23 +5,12 @@ import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.Channel;
 import jerklib.events.MessageEvent;
 
-public class NickServCommand implements Command {
-	String params;
-	MessageEvent me;
+public class NickServCommand extends Command {
 	Bot bot;
 
 	public void init(String params, MessageEvent me, Bot bot) {
-		this.params = params;
-		this.me = me;
+		super.init(params, me, bot);
 		this.bot = bot;
-	}
-	
-	public void run() {
-		if (me.getChannel() == null) {
-			execPriv();
-		}else {
-			exec();
-		}
 	}
 	
 	public void exec() {

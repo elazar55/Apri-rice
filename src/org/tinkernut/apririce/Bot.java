@@ -2,7 +2,6 @@
 
 package org.tinkernut.apririce;
 
-import java.awt.List;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
 import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
@@ -40,9 +38,11 @@ public class Bot implements IRCEventListener, Runnable {
 	private HashMap<String, Command> commandsMap;
 	private BufferedWriter bLogWriter;
 	private String botName;
+	private ArrayList<User> userList;
+	private boolean isPublicDefined = false;
+	private boolean isPrivateDefined = false;
 	//Global instance commands
 	private Command announceCommand;
-	private ArrayList<User> userList;
 
 	ExecutorService privateExecutorService = Executors.newCachedThreadPool();
 	ExecutorService publicExecutorService = Executors.newCachedThreadPool();	
@@ -121,19 +121,23 @@ public class Bot implements IRCEventListener, Runnable {
 			// Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
-
-				//Local instance commands
-				Command helpCommand = new HelpCommand();
-				Command defineCommand = new DefineCommand();
-				Command logCommand = new LogCommand();
-				Command quitCommand = new QuitCommand();
-
-				//Put identifier and associated command
-				commandsMap.put("help", helpCommand);
-				commandsMap.put("define", defineCommand);
-				commandsMap.put("announce", announceCommand);
-				commandsMap.put("log", logCommand);
-				commandsMap.put("quit", quitCommand);
+				
+				if (!isPublicDefined) {					
+					//Local instance commands
+					Command helpCommand = new HelpCommand();
+					Command defineCommand = new DefineCommand();
+					Command logCommand = new LogCommand();
+					Command quitCommand = new QuitCommand();
+					
+					//Put identifier and associated command
+					commandsMap.put("help", helpCommand);
+					commandsMap.put("define", defineCommand);
+					commandsMap.put("announce", announceCommand);
+					commandsMap.put("log", logCommand);
+					commandsMap.put("quit", quitCommand);
+					
+					isPublicDefined = true;
+				}
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
@@ -151,21 +155,25 @@ public class Bot implements IRCEventListener, Runnable {
 				// Check and execute any commands
 				String commandString = Parser.stripCommand(me.getMessage());
 
-				//Local instance commands
-				Command helpCommand = new HelpCommand();
-				Command nickServCommand = new NickServCommand();
-				Command logCommand = new LogCommand();
-				Command quitCommand = new QuitCommand();
-
-				//Put identifier and associated command
-				commandsMap.put("nickserv", nickServCommand);
-				commandsMap.put("log", logCommand);
-				commandsMap.put("help", helpCommand);
-				commandsMap.put("quit", quitCommand);
+				if (!isPrivateDefined) {					
+					//Local instance commands
+					Command helpCommand = new HelpCommand();
+					Command nickServCommand = new NickServCommand();
+					Command logCommand = new LogCommand();
+					Command quitCommand = new QuitCommand();
+					
+					//Put identifier and associated command
+					commandsMap.put("nickserv", nickServCommand);
+					commandsMap.put("log", logCommand);
+					commandsMap.put("help", helpCommand);
+					commandsMap.put("quit", quitCommand);
+					
+					isPrivateDefined = true;
+				}
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
-					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
+					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(me.getNick())));
 					
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}
