@@ -2,9 +2,11 @@
 
 package org.tinkernut.apririce;
 
+import java.awt.List;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -40,6 +42,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private String botName;
 	//Global instance commands
 	private Command announceCommand;
+	private ArrayList<User> userList;
 
 	ExecutorService privateExecutorService = Executors.newCachedThreadPool();
 	ExecutorService publicExecutorService = Executors.newCachedThreadPool();	
@@ -52,7 +55,9 @@ public class Bot implements IRCEventListener, Runnable {
 		commandsMap = new HashMap<String, Command>();
 		
 		announceCommand = new AnnounceCommand();
-
+		
+		userList = new ArrayList<User>();
+		
 		ircServer = server;
 		channelName = channel;
 		this.botName = botName;
@@ -91,7 +96,10 @@ public class Bot implements IRCEventListener, Runnable {
 			// User successfuly joins channel
 		} else if (type == Type.JOIN) {
 			JoinEvent je = (JoinEvent) e;
-
+			// Create User instance variable for each new user in userList
+			if (!userList.contains(je.getNick())) {
+				userList.add(new User(je.getNick()));
+			}
 			// User successfuly leaves channel
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
