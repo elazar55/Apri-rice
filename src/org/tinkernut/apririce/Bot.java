@@ -5,7 +5,6 @@ package org.tinkernut.apririce;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -136,6 +135,7 @@ public class Bot implements IRCEventListener, Runnable {
 					Command defineCommand = new DefineCommand();
 					Command logCommand = new LogCommand();
 					Command quitCommand = new QuitCommand();
+					Command userCommand = new UserCommand();
 					
 					//Put identifier and associated command
 					commandsMap.put("help", helpCommand);
@@ -143,6 +143,7 @@ public class Bot implements IRCEventListener, Runnable {
 					commandsMap.put("announce", announceCommand);
 					commandsMap.put("log", logCommand);
 					commandsMap.put("quit", quitCommand);
+					commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
@@ -174,7 +175,7 @@ public class Bot implements IRCEventListener, Runnable {
 					commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
-					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick()))));
+					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick().toLowerCase()))));
 					
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}

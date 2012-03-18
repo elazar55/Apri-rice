@@ -3,7 +3,7 @@ package org.tinkernut.apririce;
 public class User {
 	public int warnings = 0;
 	private String nick;
-	Rank rank = Rank.Standard;
+	public Rank rank = Rank.Standard;
 	
 	public User(String nick) {
 		this.nick = nick;
@@ -25,8 +25,4 @@ public class User {
 		}
 		return true;
 	}
-}
-
-enum Rank{
-	Admin, Standard;
 }
