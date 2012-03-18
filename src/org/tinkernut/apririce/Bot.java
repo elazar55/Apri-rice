@@ -114,6 +114,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 			// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
+			// Logging.
 			if (isLogging) {
 				try {
 					bLogWriter = new BufferedWriter(new FileWriter("log.txt", true));
@@ -155,6 +156,18 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 			// Private message successfuly recieved
 		} else if (type == Type.PRIVATE_MESSAGE) {
+			// Logging.
+			if (isLogging) {
+				try {
+					bLogWriter = new BufferedWriter(new FileWriter("log.txt", true));
+					bLogWriter.write(e.getRawEventData());
+					bLogWriter.newLine();
+					bLogWriter.close();
+				} catch (IOException e1) {
+					System.out.println("Error. Could not open log file.");
+				}
+			}
+			
 			MessageEvent me = (MessageEvent) e;
 			if (me.getMessage().startsWith(CMD_START)) {			
 				// Check and execute any commands
