@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import org.tinkernut.apririce.commands.AnnounceCommand;
@@ -16,6 +17,7 @@ import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.LogCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.commands.QuitCommand;
+import org.tinkernut.apririce.commands.UserCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -39,7 +41,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private HashMap<String, Command> commandsMap;
 	private BufferedWriter bLogWriter;
 	private String botName;
-	private ArrayList<User> userList;
+	public LinkedList<User> userList;
 	//Global instance commands
 	private Command announceCommand;
 
@@ -55,7 +57,7 @@ public class Bot implements IRCEventListener, Runnable {
 		
 		announceCommand = new AnnounceCommand();
 		
-		userList = new ArrayList<User>();
+		userList = new LinkedList<User>();
 		
 		ircServer = server;
 		channelName = channel;
@@ -95,7 +97,7 @@ public class Bot implements IRCEventListener, Runnable {
 			for (int i = 0; i < jce.getChannel().getNicks().toArray().length; i++) {
 				Object[] nicks = jce.getChannel().getNicks().toArray();
 				
-				if (!userList.contains(new User(nicks[i].toString()).nick)) {
+				if (!userList.contains(new User(nicks[i].toString()).getNick())) {
 					userList.add(new User(nicks[i].toString().toLowerCase()));
 				}
 			}
@@ -143,7 +145,6 @@ public class Bot implements IRCEventListener, Runnable {
 					commandsMap.put("quit", quitCommand);
 
 				if (commandsMap.containsKey(commandString)) {
-					// TODO: Finish threading implementation
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
 
 					publicExecutorService.execute(commandsMap.get(commandString));
@@ -163,16 +164,17 @@ public class Bot implements IRCEventListener, Runnable {
 					Command nickServCommand = new NickServCommand();
 					Command logCommand = new LogCommand();
 					Command quitCommand = new QuitCommand();
+					Command userCommand = new UserCommand();
 					
 					//Put identifier and associated command
 					commandsMap.put("nickserv", nickServCommand);
 					commandsMap.put("log", logCommand);
 					commandsMap.put("help", helpCommand);
 					commandsMap.put("quit", quitCommand);
+					commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
-					// TODO: Finish threading implementation
-					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick()))));
+					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User("elazar55"))));
 					
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}
