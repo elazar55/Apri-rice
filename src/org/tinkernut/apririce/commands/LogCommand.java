@@ -16,14 +16,14 @@ public class LogCommand  extends Command{
 	public void exec() {
 		if (params.startsWith("start")) {
 			if (!bot.isLogging) {
-				TextBuffer.addAndDisplay("Logging started", me);
+				TextBuffer.addAndDisplay("Logging started.", me);
 				bot.isLogging = true;
 			}else {
 				TextBuffer.addAndDisplay("Logging is already initiated.", me);
 			}
 		}else if (params.startsWith("stop")) {
 			if (bot.isLogging) {
-				TextBuffer.addAndDisplay("Logging stopped", me);
+				TextBuffer.addAndDisplay("Logging stopped.", me);
 				bot.isLogging = false;				
 			}else {				
 				TextBuffer.addAndDisplay("Logging is already not running.", me);
