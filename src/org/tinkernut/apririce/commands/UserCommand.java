@@ -53,8 +53,6 @@ public class UserCommand extends Command{
 	}
 
 	public void execPriv() {
-		System.out.println("Something happened -.-");
-		
 		if (bot.userList.get(bot.userList.indexOf(new User(Parser.stripArguments(params.toLowerCase().trim())))) != null) {
 			if (params.toLowerCase().startsWith("warn")) {
 				if (bot.userList.get(bot.userList.indexOf(new User(Parser.stripArguments(params.toLowerCase().trim())))).warnings == 3) {
