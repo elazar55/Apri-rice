@@ -174,7 +174,7 @@ public class Bot implements IRCEventListener, Runnable {
 					commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
-					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User("elazar55"))));
+					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick()))));
 					
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}
