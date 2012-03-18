@@ -20,6 +20,7 @@ import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
+import jerklib.events.JoinCompleteEvent;
 import jerklib.events.JoinEvent;
 import jerklib.events.MessageEvent;
 import jerklib.events.QuitEvent;
@@ -89,14 +90,22 @@ public class Bot implements IRCEventListener, Runnable {
 
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
-			// TODO: Register + identify bot
+			JoinCompleteEvent jce = (JoinCompleteEvent) e;
+			//Add all users in channel as new User
+			for (int i = 0; i < jce.getChannel().getNicks().toArray().length; i++) {
+				Object[] nicks = jce.getChannel().getNicks().toArray();
+				
+				if (!userList.contains(new User(nicks[i].toString()).nick)) {
+					userList.add(new User(nicks[i].toString().toLowerCase()));
+				}
+			}
 
 			// User successfuly joins channel
 		} else if (type == Type.JOIN) {
 			JoinEvent je = (JoinEvent) e;
 			// Create User instance variable for each new user in userList
-			if (!userList.contains(je.getNick())) {
-				userList.add(new User(je.getNick()));
+			if (!userList.contains(new User(je.getNick()))) {
+				userList.add(new User(je.getNick().toLowerCase()));
 			}
 			// User successfuly leaves channel
 		} else if (type == Type.QUIT) {
@@ -163,7 +172,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 				if (commandsMap.containsKey(commandString)) {
 					// TODO: Finish threading implementation
-					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(me.getNick())));
+					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick()))));
 					
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}

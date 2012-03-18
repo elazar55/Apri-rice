@@ -7,4 +7,13 @@ public class User {
 	public User(String nick) {
 		this.nick = nick;
 	}
+	
+	@Override
+	public boolean equals(Object object) {
+		User user = (User) object;
+		if (!this.nick.equals(user.nick)) {
+			return false;
+		}
+		return true;
+	}
 }
