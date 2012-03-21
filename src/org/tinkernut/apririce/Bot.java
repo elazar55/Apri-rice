@@ -2,9 +2,13 @@
 
 package org.tinkernut.apririce;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -46,18 +50,18 @@ public class Bot implements IRCEventListener, Runnable {
 
 	ExecutorService privateExecutorService = Executors.newCachedThreadPool();
 	ExecutorService publicExecutorService = Executors.newCachedThreadPool();	
-	
+
 	/**
 	 * Class constructor
 	 */
 	public Bot(String server, String channel, String botName) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
-		
+
 		announceCommand = new AnnounceCommand();
-		
+
 		userList = new LinkedList<User>();
-		
+
 		ircServer = server;
 		channelName = channel;
 		this.botName = botName;
@@ -92,12 +96,64 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
+
+			BufferedReader bReader;
+			String userString = "";
+
+			try {
+				bReader = new BufferedReader(new FileReader("users.txt"));
+				String s;
+				while ((s = bReader.readLine()) != null) {
+					userString += s;
+				}
+				bReader.close();
+
+				bReader = new BufferedReader(new FileReader("users.txt"));
+				if (userString != "") {
+					s = bReader.readLine();
+					
+					jce.getChannel().say(s);
+					
+					String nick = s.substring(0, s.indexOf(' '));
+					int warnings = Integer.parseInt(s.substring(nick.length() + 1, nick.length() + 2));
+//					Rank rank;
+					
+					jce.getChannel().say(nick);
+					jce.getChannel().say(Integer.toString(warnings));
+				}
+
+				bReader.close();
+				bReader = null;
+			} catch (FileNotFoundException e3) {
+				System.out.println("Error: Could not lock users.txt");
+			} catch (IOException e1) {
+				System.out.println("Error: File is inaccessible.");
+			}
+
+			PrintWriter PWriter = null;
+			Object[] nicks = jce.getChannel().getNicks().toArray();	
+
 			//Add all users in channel as new User
 			for (int i = 0; i < jce.getChannel().getNicks().toArray().length; i++) {
-				Object[] nicks = jce.getChannel().getNicks().toArray();
-				
 				if (!userList.contains(new User(nicks[i].toString()).getNick())) {
-					userList.add(new User(nicks[i].toString().toLowerCase()));
+					try {
+						PWriter = new PrintWriter(new FileWriter("users.txt", true));
+						bReader = new BufferedReader(new FileReader("users.txt"));
+
+						if (!userString.toLowerCase().contains(nicks[i].toString().toLowerCase())) {							
+							PWriter.println(nicks[i].toString() + " 0" + " standard");
+							jce.getChannel().say("New user detected.");
+						}
+
+						PWriter.close();
+						bReader.close();
+					} catch (IOException e1) {
+						System.out.println("users.txt is inaccessible.");
+					} catch (NullPointerException e2) {
+						PWriter.println(nicks[i].toString());
+					}
+
+					userList.add(new User(nicks[i].toString().toLowerCase()));					
 				}
 			}
 
@@ -125,26 +181,26 @@ public class Bot implements IRCEventListener, Runnable {
 					System.out.println("Error. Could not open log file.");
 				}
 			}
-			
+
 			MessageEvent me = (MessageEvent) e;
 			// Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
-								
-					//Local instance commands
-					Command helpCommand = new HelpCommand();
-					Command defineCommand = new DefineCommand();
-					Command logCommand = new LogCommand();
-					Command quitCommand = new QuitCommand();
-					Command userCommand = new UserCommand();
-					
-					//Put identifier and associated command
-					commandsMap.put("help", helpCommand);
-					commandsMap.put("define", defineCommand);
-					commandsMap.put("announce", announceCommand);
-					commandsMap.put("log", logCommand);
-					commandsMap.put("quit", quitCommand);
-					commandsMap.put("user", userCommand);
+
+				//Local instance commands
+				Command helpCommand = new HelpCommand();
+				Command defineCommand = new DefineCommand();
+				Command logCommand = new LogCommand();
+				Command quitCommand = new QuitCommand();
+				Command userCommand = new UserCommand();
+
+				//Put identifier and associated command
+				commandsMap.put("help", helpCommand);
+				commandsMap.put("define", defineCommand);
+				commandsMap.put("announce", announceCommand);
+				commandsMap.put("log", logCommand);
+				commandsMap.put("quit", quitCommand);
+				commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
@@ -167,29 +223,29 @@ public class Bot implements IRCEventListener, Runnable {
 					System.out.println("Error. Could not open log file.");
 				}
 			}
-			
+
 			MessageEvent me = (MessageEvent) e;
 			if (me.getMessage().startsWith(CMD_START)) {			
 				// Check and execute any commands
 				String commandString = Parser.stripCommand(me.getMessage());
-					
-					//Local instance commands
-					Command helpCommand = new HelpCommand();
-					Command nickServCommand = new NickServCommand();
-					Command logCommand = new LogCommand();
-					Command quitCommand = new QuitCommand();
-					Command userCommand = new UserCommand();
-					
-					//Put identifier and associated command
-					commandsMap.put("nickserv", nickServCommand);
-					commandsMap.put("log", logCommand);
-					commandsMap.put("help", helpCommand);
-					commandsMap.put("quit", quitCommand);
-					commandsMap.put("user", userCommand);
+
+				//Local instance commands
+				Command helpCommand = new HelpCommand();
+				Command nickServCommand = new NickServCommand();
+				Command logCommand = new LogCommand();
+				Command quitCommand = new QuitCommand();
+				Command userCommand = new UserCommand();
+
+				//Put identifier and associated command
+				commandsMap.put("nickserv", nickServCommand);
+				commandsMap.put("log", logCommand);
+				commandsMap.put("help", helpCommand);
+				commandsMap.put("quit", quitCommand);
+				commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick().toLowerCase()))));
-					
+
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}
 				else {
