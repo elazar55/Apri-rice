@@ -201,7 +201,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("announce", announceCommand);
 				commandsMap.put("log", logCommand);
 				commandsMap.put("quit", quitCommand);
-				commandsMap.put("user", userCommand);
+//				commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
@@ -242,7 +242,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("log", logCommand);
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("quit", quitCommand);
-				commandsMap.put("user", userCommand);
+//				commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick().toLowerCase()))));
