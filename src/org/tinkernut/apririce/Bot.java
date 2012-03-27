@@ -96,66 +96,67 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
-
-			BufferedReader bReader;
-			String userString = "";
-
-			try {
-				bReader = new BufferedReader(new FileReader("users.txt"));
-				String s;
-				while ((s = bReader.readLine()) != null) {
-					userString += s;
-				}
-				bReader.close();
-
-				bReader = new BufferedReader(new FileReader("users.txt"));
-				if (userString != "") {
-					s = bReader.readLine();
-					
-					jce.getChannel().say(s);
-					
-					String nick = s.substring(0, s.indexOf(' '));
-					int warnings = Integer.parseInt(s.substring(nick.length() + 1, nick.length() + 2));
+			
+			@Deprecated
+//			BufferedReader bReader;
+//			String userString = "";
+//
+//			try {
+//				bReader = new BufferedReader(new FileReader("users.txt"));
+//				String s;
+//				while ((s = bReader.readLine()) != null) {
+//					userString += s;
+//				}
+//				bReader.close();
+//
+//				bReader = new BufferedReader(new FileReader("users.txt"));
+//				if (userString != "") {
+//					s = bReader.readLine();
+//					
+//					jce.getChannel().say(s);
+//					
+//					String nick = s.substring(0, s.indexOf(' '));
+//					int warnings = Integer.parseInt(s.substring(nick.length() + 1, nick.length() + 2));
 //					Rank rank;
-					
-					jce.getChannel().say(nick);
-					jce.getChannel().say(Integer.toString(warnings));
-				}
-
-				bReader.close();
-				bReader = null;
-			} catch (FileNotFoundException e3) {
-				System.out.println("Error: Could not lock users.txt");
-			} catch (IOException e1) {
-				System.out.println("Error: File is inaccessible.");
-			}
-
-			PrintWriter PWriter = null;
-			Object[] nicks = jce.getChannel().getNicks().toArray();	
-
-			//Add all users in channel as new User
-			for (int i = 0; i < jce.getChannel().getNicks().toArray().length; i++) {
-				if (!userList.contains(new User(nicks[i].toString()).getNick())) {
-					try {
-						PWriter = new PrintWriter(new FileWriter("users.txt", true));
-						bReader = new BufferedReader(new FileReader("users.txt"));
-
-						if (!userString.toLowerCase().contains(nicks[i].toString().toLowerCase())) {							
-							PWriter.println(nicks[i].toString() + " 0" + " standard");
-							jce.getChannel().say("New user detected.");
-						}
-
-						PWriter.close();
-						bReader.close();
-					} catch (IOException e1) {
-						System.out.println("users.txt is inaccessible.");
-					} catch (NullPointerException e2) {
-						PWriter.println(nicks[i].toString());
-					}
-
-					userList.add(new User(nicks[i].toString().toLowerCase()));					
-				}
-			}
+//					
+//					jce.getChannel().say(nick);
+//					jce.getChannel().say(Integer.toString(warnings));
+//				}
+//
+//				bReader.close();
+//				bReader = null;
+//			} catch (FileNotFoundException e3) {
+//				System.out.println("Error: Could not lock users.txt");
+//			} catch (IOException e1) {
+//				System.out.println("Error: File is inaccessible.");
+//			}
+//
+//			PrintWriter PWriter = null;
+//			Object[] nicks = jce.getChannel().getNicks().toArray();	
+//
+//			//Add all users in channel as new User
+//			for (int i = 0; i < jce.getChannel().getNicks().toArray().length; i++) {
+//				if (!userList.contains(new User(nicks[i].toString()).getNick())) {
+//					try {
+//						PWriter = new PrintWriter(new FileWriter("users.txt", true));
+//						bReader = new BufferedReader(new FileReader("users.txt"));
+//
+//						if (!userString.toLowerCase().contains(nicks[i].toString().toLowerCase())) {							
+//							PWriter.println(nicks[i].toString() + " 0" + " standard");
+//							jce.getChannel().say("New user detected.");
+//						}
+//
+//						PWriter.close();
+//						bReader.close();
+//					} catch (IOException e1) {
+//						System.out.println("users.txt is inaccessible.");
+//					} catch (NullPointerException e2) {
+//						PWriter.println(nicks[i].toString());
+//					}
+//
+//					userList.add(new User(nicks[i].toString().toLowerCase()));					
+//				}
+//			}
 
 			// User successfuly joins channel
 		} else if (type == Type.JOIN) {
