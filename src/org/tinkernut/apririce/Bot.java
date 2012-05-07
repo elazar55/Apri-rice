@@ -96,67 +96,8 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
-			
-			@Deprecated
-//			BufferedReader bReader;
-//			String userString = "";
-//
-//			try {
-//				bReader = new BufferedReader(new FileReader("users.txt"));
-//				String s;
-//				while ((s = bReader.readLine()) != null) {
-//					userString += s;
-//				}
-//				bReader.close();
-//
-//				bReader = new BufferedReader(new FileReader("users.txt"));
-//				if (userString != "") {
-//					s = bReader.readLine();
-//					
-//					jce.getChannel().say(s);
-//					
-//					String nick = s.substring(0, s.indexOf(' '));
-//					int warnings = Integer.parseInt(s.substring(nick.length() + 1, nick.length() + 2));
-//					Rank rank;
-//					
-//					jce.getChannel().say(nick);
-//					jce.getChannel().say(Integer.toString(warnings));
-//				}
-//
-//				bReader.close();
-//				bReader = null;
-//			} catch (FileNotFoundException e3) {
-//				System.out.println("Error: Could not lock users.txt");
-//			} catch (IOException e1) {
-//				System.out.println("Error: File is inaccessible.");
-//			}
-//
-//			PrintWriter PWriter = null;
-//			Object[] nicks = jce.getChannel().getNicks().toArray();	
-//
-//			//Add all users in channel as new User
-//			for (int i = 0; i < jce.getChannel().getNicks().toArray().length; i++) {
-//				if (!userList.contains(new User(nicks[i].toString()).getNick())) {
-//					try {
-//						PWriter = new PrintWriter(new FileWriter("users.txt", true));
-//						bReader = new BufferedReader(new FileReader("users.txt"));
-//
-//						if (!userString.toLowerCase().contains(nicks[i].toString().toLowerCase())) {							
-//							PWriter.println(nicks[i].toString() + " 0" + " standard");
-//							jce.getChannel().say("New user detected.");
-//						}
-//
-//						PWriter.close();
-//						bReader.close();
-//					} catch (IOException e1) {
-//						System.out.println("users.txt is inaccessible.");
-//					} catch (NullPointerException e2) {
-//						PWriter.println(nicks[i].toString());
-//					}
-//
-//					userList.add(new User(nicks[i].toString().toLowerCase()));					
-//				}
-//			}
+
+			//TODO: Rewrite user logging, saving, etc,.
 
 			// User successfuly joins channel
 		} else if (type == Type.JOIN) {
@@ -193,7 +134,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command defineCommand = new DefineCommand();
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
-				Command userCommand = new UserCommand();
+				// I doubt this works yet -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
@@ -201,7 +142,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("announce", announceCommand);
 				commandsMap.put("log", logCommand);
 				commandsMap.put("quit", quitCommand);
-//				commandsMap.put("user", userCommand);
+				// I doubt this works yet -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
@@ -242,7 +183,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("log", logCommand);
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("quit", quitCommand);
-//				commandsMap.put("user", userCommand);
+				//				commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick().toLowerCase()))));
