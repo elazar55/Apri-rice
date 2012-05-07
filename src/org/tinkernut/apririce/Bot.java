@@ -109,7 +109,7 @@ public class Bot implements IRCEventListener, Runnable {
 			// User successfuly leaves channel
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
-
+			
 			// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			// Logging.
