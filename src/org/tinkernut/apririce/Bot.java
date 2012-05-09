@@ -165,7 +165,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 			MessageEvent me = (MessageEvent) e;
 			if (me.getMessage().startsWith(CMD_START)) {			
-				// Check and execute any commands
+				//Check and execute any commands
 				String commandString = Parser.stripCommand(me.getMessage());
 
 				//Local instance commands
@@ -173,7 +173,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command nickServCommand = new NickServCommand();
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
-				// Probably doesn't work! -> Command userCommand = new UserCommand();
+				//Probably doesn't work! -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
