@@ -131,7 +131,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command defineCommand = new DefineCommand();
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
-				// I doubt this works yet -> Command userCommand = new UserCommand();
+				//I doubt this works yet -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("help", helpCommand);
