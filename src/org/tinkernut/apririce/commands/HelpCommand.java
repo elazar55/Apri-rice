@@ -9,6 +9,5 @@ public class HelpCommand extends Command {
 
 	public void execPriv() {
 		System.out.println("This is the private secotr!");
-		System.out.println("sup" + sender.getNick());
 	}
 }

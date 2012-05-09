@@ -18,7 +18,6 @@ import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.LogCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.commands.QuitCommand;
-import org.tinkernut.apririce.commands.UserCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -174,17 +173,17 @@ public class Bot implements IRCEventListener, Runnable {
 				Command nickServCommand = new NickServCommand();
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
-				Command userCommand = new UserCommand();
+				// Probably doesn't work! -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
 				commandsMap.put("nickserv", nickServCommand);
 				commandsMap.put("log", logCommand);
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("quit", quitCommand);
-				//				commandsMap.put("user", userCommand);
+				// Probably doesn't work! I mean totally doesn't work yet!!! -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
-					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this, userList.get(userList.indexOf(new User(me.getNick().toLowerCase()))));
+					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this);
 
 					privateExecutorService.execute(commandsMap.get(commandString));
 				}

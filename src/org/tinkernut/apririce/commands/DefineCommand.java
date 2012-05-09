@@ -21,6 +21,7 @@ public class DefineCommand extends Command {
 		Map<String, website> urlMap = new HashMap<String, website>();
 		try {
 			urlMap.put("urban", new website("<div class=\"definition\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
+			urlMap.put("dic", new website("<div class=\"dndata\">", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
 		} catch (MalformedURLException e1) {
 			new TextBuffer();
 			TextBuffer.addAndDisplay("Malformed URL.", me);
@@ -29,7 +30,7 @@ public class DefineCommand extends Command {
 		if (params.contains(" ")) {			
 			try {
 				
-				if (urlMap.containsKey(Parser.getFirstArgument(params))) {
+				if (urlMap.containsKey(Parser.getFirstArgument(params.toLowerCase()))) {
 					//Replace special characters in to be defined String
 					String urlAddon = Parser.stripArguments(params);
 					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {

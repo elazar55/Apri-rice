@@ -1,3 +1,4 @@
+/*
 package org.tinkernut.apririce.commands;
 
 import jerklib.Channel;
@@ -86,3 +87,4 @@ public class UserCommand extends Command{
 		}
 	}
 }
+*/
