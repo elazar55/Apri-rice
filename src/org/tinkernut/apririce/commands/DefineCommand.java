@@ -20,8 +20,8 @@ public class DefineCommand extends Command {
 	public void exec() {		
 		Map<String, website> urlMap = new HashMap<String, website>();
 		try {
-			urlMap.put("urban", new website("<div class=\"definition\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
-			urlMap.put("dic", new website("<div class=\"dndata\">", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
+			urlMap.put("urban", new website("<div class=\"definition\">", "</", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
+			urlMap.put("dic", new website("<div class=\"dndata\">", "</div>", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
 		} catch (MalformedURLException e1) {
 			new TextBuffer();
 			TextBuffer.addAndDisplay("Malformed URL.", me);
@@ -29,14 +29,14 @@ public class DefineCommand extends Command {
 
 		if (params.contains(" ")) {			
 			try {
-				
+
 				if (urlMap.containsKey(Parser.getFirstArgument(params.toLowerCase()))) {
 					//Replace special characters in to be defined String
 					String urlAddon = Parser.stripArguments(params);
 					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
 					}
-					
+
 					//Append definition String to url
 					urlMap.get(Parser.getFirstArgument(params)).url = new URL(urlMap.get(Parser.getFirstArgument(params)).url.toString() + urlAddon); 
 
@@ -47,21 +47,41 @@ public class DefineCommand extends Command {
 
 					//Put whole page source into a single line string
 					String HTMLSource = "";
-					
+
 					while (!HTMLSource.contains("</html>")) {
 						HTMLSource += bReader.readLine();
 					}
-					
-					HTMLSource = HTMLSource.replace("<br/>", " ");
+
+					String unusedStart = HTMLSource.substring(0, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag));
+					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag));
+					HTMLSource = HTMLSource.replace(unusedStart, "");
+					HTMLSource = HTMLSource.replace(unusedEnd, "");
 					HTMLSource = HTMLSource.replace("&quot;", "\"");
 					HTMLSource = HTMLSource.replace("\n\t", " ");
 					HTMLSource = HTMLSource.replace("  ", " ");
 
-					//Extract definition
-					int start = HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag) + urlMap.get(Parser.getFirstArgument(params)).startingTag.length();
-					int end = HTMLSource.indexOf("<", start);
+					System.out.println(HTMLSource);
+					System.out.println();
+					System.out.println();
+					System.out.println(unusedEnd);
 
-					String definition = HTMLSource.substring(start, end);
+					String tagReplace = "";
+					while (!tagReplace.equals(null)) {
+						try {
+							int startTag = HTMLSource.indexOf("<");							
+							int endTag = HTMLSource.indexOf(">") + 1;
+							tagReplace = HTMLSource.substring(startTag, endTag);
+							HTMLSource = HTMLSource.replace(tagReplace, "");						
+						} catch (IndexOutOfBoundsException e) {
+							break;
+						}
+					}
+
+					//Extract definition
+					//					int start = 0;
+					//					int end = HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag, start);
+
+					String definition = HTMLSource;
 					new TextBuffer();
 					TextBuffer.addAndDisplay(definition, me);
 				}else {
@@ -88,11 +108,14 @@ public class DefineCommand extends Command {
 
 class website{
 	String startingTag;
+	String endingTag;
 	characterReplacement charReplacement;
 
 	URL url;
-	public website(String startingTag, characterReplacement charReplacement, URL url) {
+
+	public website(String startingTag, String endingTag, characterReplacement charReplacement, URL url) {
 		this.startingTag = startingTag;
+		this.endingTag = endingTag;
 		this.charReplacement = charReplacement;
 		this.url = url;
 	}
