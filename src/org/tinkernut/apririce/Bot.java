@@ -1,5 +1,3 @@
-// TODO: Make threaded
-
 package org.tinkernut.apririce;
 
 import java.io.BufferedReader;
