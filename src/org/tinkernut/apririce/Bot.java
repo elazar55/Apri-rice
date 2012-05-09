@@ -139,7 +139,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("announce", announceCommand);
 				commandsMap.put("log", logCommand);
 				commandsMap.put("quit", quitCommand);
-				// I doubt this works yet -> commandsMap.put("user", userCommand);
+				//I doubt this works yet -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
