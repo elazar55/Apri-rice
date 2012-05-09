@@ -7,7 +7,7 @@ import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.Rank;
 import org.tinkernut.apririce.User;
 import org.tinkernut.apririce.textUtils.Parser;
-@Deprecated // Rewrite this
+@Deprecated //TODO: Rewrite this
 public class UserCommand extends Command{
 	Bot bot;
 
