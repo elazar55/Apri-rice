@@ -122,7 +122,7 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 
 			MessageEvent me = (MessageEvent) e;
-			// Check and execute any commands
+			//Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
 
