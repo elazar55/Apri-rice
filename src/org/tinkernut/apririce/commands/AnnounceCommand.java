@@ -31,7 +31,10 @@ public class AnnounceCommand extends Command{
 			}
 		}
 		else if (params.toLowerCase().startsWith("help")) {
-			TextBuffer.addAndDisplay(help(), me);
+			TextBuffer.addAndDisplay("|announce set (time in seconds) -------- " +
+					"|announce set (words for announcement) -------- " +
+					"|announce start -------- " +
+					"|announce stop", me);
 		}
 		//start argument
 		if (params.startsWith("start")) {
@@ -71,12 +74,5 @@ public class AnnounceCommand extends Command{
 			}, 0, interval);
 		}
 
-	}
-	@Override
-	String help() {
-		return "|announce set (time in seconds) -------- " +
-				"|announce set (words for announcement) -------- " +
-				"|announce start -------- " +
-				"|announce stop";
 	}
 }
