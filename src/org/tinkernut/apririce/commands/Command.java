@@ -1,7 +1,6 @@
 package org.tinkernut.apririce.commands;
 
 import org.tinkernut.apririce.Bot;
-import org.tinkernut.apririce.User;
 import jerklib.events.MessageEvent;
 
 public abstract class Command implements Runnable{

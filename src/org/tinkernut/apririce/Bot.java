@@ -16,6 +16,7 @@ import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.LogCommand;
+import org.tinkernut.apririce.commands.NickCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.commands.QuitCommand;
 import org.tinkernut.apririce.textUtils.Parser;
@@ -131,6 +132,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command defineCommand = new DefineCommand();
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
+				Command nickCommand = new NickCommand();
 				//I doubt this works yet -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
@@ -139,6 +141,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("announce", announceCommand);
 				commandsMap.put("log", logCommand);
 				commandsMap.put("quit", quitCommand);
+				commandsMap.put("nick", nickCommand);
 				//I doubt this works yet -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
@@ -173,6 +176,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command nickServCommand = new NickServCommand();
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
+				Command nickCommand = new NickCommand();
 				//Probably doesn't work! -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
@@ -180,6 +184,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("log", logCommand);
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("quit", quitCommand);
+				commandsMap.put("nick", nickCommand);
 				// Probably doesn't work! I mean totally doesn't work yet!!! -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
