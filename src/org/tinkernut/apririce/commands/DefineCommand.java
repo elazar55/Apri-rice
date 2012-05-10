@@ -52,7 +52,15 @@ public class DefineCommand extends Command {
 						HTMLSource += bReader.readLine();
 					}
 
-					String unusedStart = HTMLSource.substring(0, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag));
+					// Remove everything from HTMLSource except definition with unique HTML tags.
+					String unusedStart = "";
+					try {
+						unusedStart = HTMLSource.substring(0, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag));						
+					} catch (StringIndexOutOfBoundsException e) {
+						TextBuffer.addAndDisplay("Definition doesn't exist, or error.", me);
+						return;
+					}
+					
 					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag));
 					
 					HTMLSource = HTMLSource.replace(unusedStart, "");
