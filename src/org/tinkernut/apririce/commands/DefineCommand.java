@@ -20,7 +20,7 @@ public class DefineCommand extends Command {
 	public void exec() {		
 		Map<String, website> urlMap = new HashMap<String, website>();
 		try {
-			urlMap.put("urban", new website("<div class=\"definition\">", "</", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
+			urlMap.put("urban", new website("<div class=\"definition\">", "</div><div class=\"example\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
 			urlMap.put("dic", new website("<div class=\"dndata\">", "</div>", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
 		} catch (MalformedURLException e1) {
 			new TextBuffer();
@@ -54,16 +54,12 @@ public class DefineCommand extends Command {
 
 					String unusedStart = HTMLSource.substring(0, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag));
 					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag));
+					
 					HTMLSource = HTMLSource.replace(unusedStart, "");
 					HTMLSource = HTMLSource.replace(unusedEnd, "");
 					HTMLSource = HTMLSource.replace("&quot;", "\"");
 					HTMLSource = HTMLSource.replace("\n\t", " ");
 					HTMLSource = HTMLSource.replace("  ", " ");
-
-					System.out.println(HTMLSource);
-					System.out.println();
-					System.out.println();
-					System.out.println(unusedEnd);
 
 					String tagReplace = "";
 					while (!tagReplace.equals(null)) {
