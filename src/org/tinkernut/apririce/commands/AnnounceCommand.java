@@ -30,6 +30,9 @@ public class AnnounceCommand extends Command{
 				}
 			}
 		}
+		else if (params.toLowerCase().startsWith("help")) {
+			TextBuffer.addAndDisplay(help(), me);
+		}
 		//start argument
 		if (params.startsWith("start")) {
 			start();
@@ -38,7 +41,6 @@ public class AnnounceCommand extends Command{
 			timer.cancel();
 			TextBuffer.addAndDisplay("Announcement stopped.", me);
 		}
-
 	}
 
 	public void execPriv() {
@@ -70,5 +72,11 @@ public class AnnounceCommand extends Command{
 		}
 
 	}
-
+	@Override
+	String help() {
+		return "|announce set (time in seconds) -------- " +
+				"|announce set (words for announcement) -------- " +
+				"|announce start -------- " +
+				"|announce stop";
+	}
 }
