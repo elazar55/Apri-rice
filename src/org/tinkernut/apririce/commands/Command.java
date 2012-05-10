@@ -28,4 +28,8 @@ public abstract class Command implements Runnable{
 	abstract void exec();
 
 	abstract void execPriv();
+	
+	String help() {
+		return "Insert help text here.";
+	}
 }
