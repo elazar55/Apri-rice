@@ -14,10 +14,12 @@ public class QuitCommand extends Command {
 
 	public void exec() {
 		bot.con.quit();
+		System.exit(0);
 	}
 
 	public void execPriv() {
 		exec();
+		System.exit(0);
 	}
 	
 }
