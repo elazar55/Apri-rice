@@ -21,7 +21,7 @@ public class DefineCommand extends Command {
 		Map<String, website> urlMap = new HashMap<String, website>();
 		try {
 			urlMap.put("urban", new website("<div class=\"definition\">", "</div><div class=\"example\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
-			urlMap.put("dic", new website("<div class=\"dndata\">", "</div>", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
+			urlMap.put("dic", new website("<div class=\"dndata\">", "</div></div><div class=\"luna-Ent\"><span class=\"dnindex\">", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
 		} catch (MalformedURLException e1) {
 			new TextBuffer();
 			TextBuffer.addAndDisplay("Malformed URL.", me);
@@ -35,6 +35,8 @@ public class DefineCommand extends Command {
 					String urlAddon = Parser.stripArguments(params);
 					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
+					}if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.UNDERSCORE)) {
+						urlAddon = urlAddon.replace(" ", "+");
 					}
 
 					//Append definition String to url
