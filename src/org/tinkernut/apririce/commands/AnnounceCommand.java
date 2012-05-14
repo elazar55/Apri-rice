@@ -9,7 +9,8 @@ public class AnnounceCommand extends Command{
 	int interval = 0;
 	String announcement = "";
 	Timer timer;
-	private String helpText = "\"|announce set (time in seconds) -------- \" +\r\n" + 
+	@SuppressWarnings(value = { "unused" })
+	final private String helpText = "\"|announce set (time in seconds) -------- \" +\r\n" + 
 			"					\"|announce set (words for announcement) -------- \" +\r\n" + 
 			"					\"|announce start -------- \" +\r\n" + 
 			"					\"|announce stop\", me";
