@@ -23,8 +23,8 @@ public class DefineCommand extends Command {
 			urlMap.put("urban", new website("<div class=\"definition\">", "</div><div class=\"example\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
 			urlMap.put("dic", new website("<div class=\"dndata\">", "</div></div><div class=\"luna-Ent\"><span class=\"dnindex\">", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
 		} catch (MalformedURLException e1) {
-			new TextBuffer();
 			TextBuffer.addAndDisplay("Malformed URL.", me);
+			return;
 		}
 
 		if (params.contains(" ")) {			
@@ -88,21 +88,16 @@ public class DefineCommand extends Command {
 					//					int end = HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag, start);
 
 					String definition = HTMLSource;
-					new TextBuffer();
 					TextBuffer.addAndDisplay(definition, me);
 				}else {
-					new TextBuffer();
 					TextBuffer.addAndDisplay("Invalid site.", me);
 				}
 			} catch (IOException e) {
-				new TextBuffer();
 				TextBuffer.addAndDisplay("Unable to establish connection.", me);
 			}
 		}else if(!urlMap.containsKey(Parser.getFirstArgument(params))){			
-			new TextBuffer();
 			TextBuffer.addAndDisplay("Invalid site.", me);
 		}else {			
-			new TextBuffer();
 			TextBuffer.addAndDisplay("Input something to define.", me);
 		}
 	}
