@@ -9,6 +9,10 @@ public class AnnounceCommand extends Command{
 	int interval = 0;
 	String announcement = "";
 	Timer timer;
+	private String helpText = "\"|announce set (time in seconds) -------- \" +\r\n" + 
+			"					\"|announce set (words for announcement) -------- \" +\r\n" + 
+			"					\"|announce start -------- \" +\r\n" + 
+			"					\"|announce stop\", me";
 
 	public void exec() {
 		//set argument
@@ -31,10 +35,7 @@ public class AnnounceCommand extends Command{
 			}
 		}
 		else if (params.toLowerCase().startsWith("help")) {
-			TextBuffer.addAndDisplay("|announce set (time in seconds) -------- " +
-					"|announce set (words for announcement) -------- " +
-					"|announce start -------- " +
-					"|announce stop", me);
+			TextBuffer.addAndDisplay(getHelpText(), me);
 		}
 		//start argument
 		if (params.startsWith("start")) {
