@@ -19,7 +19,6 @@ public class QuitCommand extends Command {
 
 	public void execPriv() {
 		exec();
-		System.exit(0);
 	}
 	
 }
