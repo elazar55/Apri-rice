@@ -6,7 +6,7 @@ import jerklib.events.MessageEvent;
 public abstract class Command implements Runnable{
 	protected String params;
 	protected MessageEvent me;
-	private String helpText = "Some help text.";
+	final private String helpText = "Some help text.";
 	
 	public void init(String params, MessageEvent me, Bot bot) {
 		this.params = params;
