@@ -35,6 +35,7 @@ public class Bot implements IRCEventListener, Runnable {
 	 */
 	public String channelName;
 	public boolean isLogging = false;
+	private boolean isUsingPassword = false;
 	private final String CMD_START = "|";
 	private String ircServer;
 	public ConnectionManager con;
@@ -43,6 +44,8 @@ public class Bot implements IRCEventListener, Runnable {
 	private BufferedReader bReader;
 	private String botName;
 	public LinkedList<User> userList;
+	private String nick = "";
+	private String password = "";
 	//Global instance commands
 	private Command announceCommand;
 
@@ -73,8 +76,9 @@ public class Bot implements IRCEventListener, Runnable {
 			if (configFile.exists()) {
 				bReader = new BufferedReader(new FileReader(configFile));
 				
-				String nick = bReader.readLine();
-				String password = bReader.readLine();
+				nick = bReader.readLine();
+				password = bReader.readLine();
+				isUsingPassword = true;
 
 				if (nick == null) {
 					nick = this.botName;
@@ -83,6 +87,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 				if (password == null) {
 					password = "";
+					isUsingPassword = false;
 					System.out.println("No password specified in " + configFile.getName() + ". Not using password.");					
 				}
 
@@ -125,6 +130,10 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
+			
+			if (isUsingPassword) {
+				jce.getSession().sayPrivate("nickserv", "identify " + password);
+			}
 
 			//TODO: Rewrite user logging, saving, etc,.
 
