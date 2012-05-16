@@ -1,6 +1,9 @@
 package org.tinkernut.apririce;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,7 +39,8 @@ public class Bot implements IRCEventListener, Runnable {
 	private String ircServer;
 	public ConnectionManager con;
 	private HashMap<String, Command> commandsMap;
-	private BufferedWriter bLogWriter;
+	private BufferedWriter bWriter;
+	private BufferedReader bReader;
 	private String botName;
 	public LinkedList<User> userList;
 	//Global instance commands
@@ -61,8 +65,39 @@ public class Bot implements IRCEventListener, Runnable {
 		this.botName = botName;
 
 		// TODO: Create storage
-		// Bot profile (nick)
-		con = new ConnectionManager(new Profile(this.botName));
+
+		File configFile = new File(channelName + "_config.txt");
+
+		try {
+
+			if (configFile.exists()) {
+				bReader = new BufferedReader(new FileReader(configFile));
+				
+				String nick = bReader.readLine();
+				String password = bReader.readLine();
+
+				if (nick == null) {
+					nick = this.botName;
+					System.out.println("No nick specified in " + configFile.getName() + ". Using default.");			
+				}
+
+				if (password == null) {
+					password = "";
+					System.out.println("No password specified in " + configFile.getName() + ". Not using password.");					
+				}
+
+				con = new ConnectionManager(new Profile(nick));
+			}else {			
+				// Bot profile (nick)
+				System.out.println("No " + configFile.getName() + " in directory. Creating "+ configFile.getName() +" and using default nick and password (no password by default).");
+				con = new ConnectionManager(new Profile(this.botName));
+
+				configFile.createNewFile();
+			}
+		} catch (IOException e) {
+			System.out.println("File " + configFile.getName() + " inaccessible.");
+		}
+
 	}
 
 	//Thread start
@@ -103,16 +138,16 @@ public class Bot implements IRCEventListener, Runnable {
 			// User successfuly leaves channel
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
-			
+
 			// Message successfuly recieved in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			// Logging.
 			if (isLogging) {
 				try {
-					bLogWriter = new BufferedWriter(new FileWriter("log.txt", true));
-					bLogWriter.write(e.getRawEventData());
-					bLogWriter.newLine();
-					bLogWriter.close();
+					bWriter = new BufferedWriter(new FileWriter("log.txt", true));
+					bWriter.write(e.getRawEventData());
+					bWriter.newLine();
+					bWriter.close();
 				} catch (IOException e1) {
 					System.out.println("Error. Could not open log file.");
 				}
@@ -153,10 +188,10 @@ public class Bot implements IRCEventListener, Runnable {
 			// Logging.
 			if (isLogging) {
 				try {
-					bLogWriter = new BufferedWriter(new FileWriter("log.txt", true));
-					bLogWriter.write(e.getRawEventData());
-					bLogWriter.newLine();
-					bLogWriter.close();
+					bWriter = new BufferedWriter(new FileWriter("log.txt", true));
+					bWriter.write(e.getRawEventData());
+					bWriter.newLine();
+					bWriter.close();
 				} catch (IOException e1) {
 					System.out.println("Error. Could not open log file.");
 				}
