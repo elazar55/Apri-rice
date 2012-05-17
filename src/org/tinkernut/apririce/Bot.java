@@ -44,7 +44,6 @@ public class Bot implements IRCEventListener, Runnable {
 	private BufferedReader bReader;
 	private String botName;
 	public LinkedList<User> userList;
-	private String nick = "";
 	private String password = "";
 	//Global instance commands
 	private Command announceCommand;
@@ -76,13 +75,15 @@ public class Bot implements IRCEventListener, Runnable {
 			if (configFile.exists()) {
 				bReader = new BufferedReader(new FileReader(configFile));
 				
-				nick = bReader.readLine();
+				String nick = bReader.readLine();
 				password = bReader.readLine();
 				isUsingPassword = true;
 
 				if (nick == null) {
 					nick = this.botName;
 					System.out.println("No nick specified in " + configFile.getName() + ". Using default.");			
+				}else {
+					this.botName = nick;
 				}
 
 				if (password == null) {
@@ -91,7 +92,7 @@ public class Bot implements IRCEventListener, Runnable {
 					System.out.println("No password specified in " + configFile.getName() + ". Not using password.");					
 				}
 
-				con = new ConnectionManager(new Profile(nick));
+				con = new ConnectionManager(new Profile(this.botName));
 			}else {			
 				// Bot profile (nick)
 				System.out.println("No " + configFile.getName() + " in directory. Creating "+ configFile.getName() +" and using default nick and password (no password by default).");
