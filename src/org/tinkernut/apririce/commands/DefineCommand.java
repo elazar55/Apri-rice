@@ -21,8 +21,8 @@ public class DefineCommand extends Command {
 		Map<String, website> urlMap = new HashMap<String, website>();
 		try {
 			urlMap.put("urban", new website("<div class=\"definition\">", "</div><div class=\"example\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
-			urlMap.put("dic", new website("<div class=\"dndata\">", "</div></div><div class=\"luna-Ent\"><span class=\"dnindex\">", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
-			urlMap.put("wiki", new website("</div><p>", ".", characterReplacement.UNDERSCORE, new URL("http://en.wikipedia.org/wiki/")));
+			urlMap.put("dic", new website("<div class=\"dndata\">", "</div></div><div class=\"luna-Ent\"><span class=\"dnindex\">", characterReplacement.PLUS, new URL("http://dictionary.reference.com/browse/")));
+			urlMap.put("wiki", new website("</div><p>", ".", characterReplacement.PLUS, new URL("http://en.wikipedia.org/wiki/")));
 		} catch (MalformedURLException e1) {
 			TextBuffer.addAndDisplay("Malformed URL.", me);
 			return;
@@ -37,7 +37,7 @@ public class DefineCommand extends Command {
 					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
 						urlAddon = urlAddon.replace(",", "%2C");
-					}if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.UNDERSCORE)) {
+					}if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PLUS)) {
 						urlAddon = urlAddon.replace(" ", "+");
 					}
 
@@ -129,6 +129,6 @@ class website{
 	}
 
 	public enum characterReplacement{
-		PERCENT, UNDERSCORE;
+		PERCENT, PLUS;
 	}
 }
