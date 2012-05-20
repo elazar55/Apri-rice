@@ -65,7 +65,6 @@ public class DefineCommand extends Command {
 						return;
 					}
 
-//					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag));
 					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag)));
 
 					HTMLSource = HTMLSource.replace(unusedStart, "");
