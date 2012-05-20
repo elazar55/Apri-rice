@@ -22,6 +22,7 @@ public class DefineCommand extends Command {
 		try {
 			urlMap.put("urban", new website("<div class=\"definition\">", "</div><div class=\"example\">", characterReplacement.PERCENT, new URL("http://www.urbandictionary.com/define.php?term=")));
 			urlMap.put("dic", new website("<div class=\"dndata\">", "</div></div><div class=\"luna-Ent\"><span class=\"dnindex\">", characterReplacement.UNDERSCORE, new URL("http://dictionary.reference.com/browse/")));
+			urlMap.put("wiki", new website("</div><p>", ".", characterReplacement.UNDERSCORE, new URL("http://en.wikipedia.org/wiki/")));
 		} catch (MalformedURLException e1) {
 			TextBuffer.addAndDisplay("Malformed URL.", me);
 			return;
@@ -35,6 +36,7 @@ public class DefineCommand extends Command {
 					String urlAddon = Parser.stripArguments(params);
 					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
+						urlAddon = urlAddon.replace(",", "%2C");
 					}if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.UNDERSCORE)) {
 						urlAddon = urlAddon.replace(" ", "+");
 					}
@@ -62,14 +64,20 @@ public class DefineCommand extends Command {
 						TextBuffer.addAndDisplay("Definition doesn't exist, or error.", me);
 						return;
 					}
-					
-					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag));
-					
+
+//					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag));
+					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag)));
+
 					HTMLSource = HTMLSource.replace(unusedStart, "");
 					HTMLSource = HTMLSource.replace(unusedEnd, "");
 					HTMLSource = HTMLSource.replace("&quot;", "\"");
 					HTMLSource = HTMLSource.replace("\n\t", " ");
+					HTMLSource = HTMLSource.replace("<br/>", " ");
+					HTMLSource = HTMLSource.replace("&amp;", "&");
 					HTMLSource = HTMLSource.replace("  ", " ");
+					if (!HTMLSource.endsWith(".")) {
+						HTMLSource += ".";
+					}
 
 					String tagReplace = "";
 					while (!tagReplace.equals(null)) {
