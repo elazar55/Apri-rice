@@ -1,5 +1,6 @@
 package org.tinkernut.apririce.textUtils;
 
+//TODO: Improve this (getNextArgument with buffer, etc,.)
 public class Parser {
 	public static String stripCommand(String cmd) {
 		if (cmd.contains(" ")) {
