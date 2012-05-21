@@ -1,6 +1,5 @@
 package org.tinkernut.apririce.textUtils;
 
-//TODO: Improve this (getNextArgument with buffer, etc,.)
 public class Parser {
 	public static String stripCommand(String cmd) {
 		if (cmd.contains(" ")) {
@@ -26,7 +25,7 @@ public class Parser {
 			return args;
 		}
 	}
-	
+
 	public static String getArgument(String args, int argc) {
 		String buffer = args;
 		for (int i = 0; i < argc - 1; i++) {
@@ -36,5 +35,21 @@ public class Parser {
 			buffer = buffer.substring(0, buffer.indexOf(" "));
 		}
 		return buffer;
+	}
+
+	public static int getArgCount(String args) {
+		String buffer = args;
+		int argC = 0;
+
+		while (buffer.contains(" ")) {
+			buffer = buffer.substring(buffer.indexOf(" ") + 1);
+			argC++;
+		}
+
+		if (buffer.equals("") || buffer.equals(" ")) {
+			return 0;
+		}else {			
+			return argC + 1;
+		}
 	}
 }
