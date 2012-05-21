@@ -18,6 +18,7 @@ import org.tinkernut.apririce.commands.LogCommand;
 import org.tinkernut.apririce.commands.NickCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.commands.QuitCommand;
+import org.tinkernut.apririce.commands.leaveCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -174,6 +175,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
 				Command nickCommand = new NickCommand();
+				Command leaveCommand = new leaveCommand();
 				//I doubt this works yet -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
@@ -183,6 +185,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("log", logCommand);
 				commandsMap.put("quit", quitCommand);
 				commandsMap.put("nick", nickCommand);
+				commandsMap.put("leave", leaveCommand);
 				//I doubt this works yet -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
