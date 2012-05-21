@@ -49,6 +49,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private String password = "";
 	//Global instance commands
 	private Command announceCommand;
+	private Command joinCommand = new JoinCommand();
 
 	ExecutorService privateExecutorService = Executors.newCachedThreadPool();
 	ExecutorService publicExecutorService = Executors.newCachedThreadPool();	
@@ -177,7 +178,6 @@ public class Bot implements IRCEventListener, Runnable {
 				Command quitCommand = new QuitCommand();
 				Command nickCommand = new NickCommand();
 				Command leaveCommand = new LeaveCommand();
-				Command joinCommand = new JoinCommand();
 				//I doubt this works yet -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
@@ -225,7 +225,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command quitCommand = new QuitCommand();
 				Command nickCommand = new NickCommand();
 				Command leaveCommand = new LeaveCommand();
-				Command joinCommand = new JoinCommand();
+				
 				//Probably doesn't work! -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
