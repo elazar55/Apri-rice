@@ -1,6 +1,6 @@
 package org.tinkernut.apririce.commands;
 
-public class leaveCommand  extends Command{
+public class LeaveCommand  extends Command{
 
 	@Override
 	void exec() {

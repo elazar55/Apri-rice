@@ -19,7 +19,7 @@ import org.tinkernut.apririce.commands.LogCommand;
 import org.tinkernut.apririce.commands.NickCommand;
 import org.tinkernut.apririce.commands.NickServCommand;
 import org.tinkernut.apririce.commands.QuitCommand;
-import org.tinkernut.apririce.commands.leaveCommand;
+import org.tinkernut.apririce.commands.LeaveCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -176,7 +176,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
 				Command nickCommand = new NickCommand();
-				Command leaveCommand = new leaveCommand();
+				Command leaveCommand = new LeaveCommand();
 				Command joinCommand = new JoinCommand();
 				//I doubt this works yet -> Command userCommand = new UserCommand();
 
@@ -224,6 +224,7 @@ public class Bot implements IRCEventListener, Runnable {
 				Command logCommand = new LogCommand();
 				Command quitCommand = new QuitCommand();
 				Command nickCommand = new NickCommand();
+				Command leaveCommand = new LeaveCommand();
 				Command joinCommand = new JoinCommand();
 				//Probably doesn't work! -> Command userCommand = new UserCommand();
 
@@ -233,6 +234,7 @@ public class Bot implements IRCEventListener, Runnable {
 				commandsMap.put("help", helpCommand);
 				commandsMap.put("quit", quitCommand);
 				commandsMap.put("nick", nickCommand);
+				commandsMap.put("leave", leaveCommand);
 				commandsMap.put("join", joinCommand);
 				// Probably doesn't work! I mean totally doesn't work yet!!! -> commandsMap.put("user", userCommand);
 
