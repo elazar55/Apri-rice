@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
@@ -50,9 +48,6 @@ public class Bot implements IRCEventListener, Runnable {
 	//Global instance commands
 	private Command announceCommand;
 	private Command joinCommand = new JoinCommand();
-
-	ExecutorService privateExecutorService = Executors.newCachedThreadPool();
-	ExecutorService publicExecutorService = Executors.newCachedThreadPool();	
 
 	/**
 	 * Class constructor
@@ -172,29 +167,33 @@ public class Bot implements IRCEventListener, Runnable {
 				String commandString = Parser.stripCommand(me.getMessage());
 
 				//Local instance commands
-				Command helpCommand = new HelpCommand();
-				Command defineCommand = new DefineCommand();
-				Command logCommand = new LogCommand();
-				Command quitCommand = new QuitCommand();
-				Command nickCommand = new NickCommand();
-				Command leaveCommand = new LeaveCommand();
+				
+				
+//				Command helpCommand = new HelpCommand();
+//				Command defineCommand = new DefineCommand();
+//				Command logCommand = new LogCommand();
+//				Command quitCommand = new QuitCommand();
+//				Command nickCommand = new NickCommand();
+//				Command leaveCommand = new LeaveCommand();
+				
+				
 				//I doubt this works yet -> Command userCommand = new UserCommand();
 
 				//Put identifier and associated command
-				commandsMap.put("help", helpCommand);
-				commandsMap.put("define", defineCommand);
+				commandsMap.put("help", new HelpCommand());
+				commandsMap.put("define",new DefineCommand());
 				commandsMap.put("announce", announceCommand);
-				commandsMap.put("log", logCommand);
-				commandsMap.put("quit", quitCommand);
-				commandsMap.put("nick", nickCommand);
-				commandsMap.put("leave", leaveCommand);
+				commandsMap.put("log", new LogCommand());
+				commandsMap.put("quit", new QuitCommand());
+				commandsMap.put("nick", new NickCommand());
+				commandsMap.put("leave", new LeaveCommand());
 				commandsMap.put("join", joinCommand);
-				//I doubt this works yet -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
 
-					publicExecutorService.execute(commandsMap.get(commandString));
+					Thread thread = new Thread(commandsMap.get(commandString));
+					thread.start();
 				}else {
 					me.getChannel().say("Not a command.");
 				}
@@ -219,29 +218,30 @@ public class Bot implements IRCEventListener, Runnable {
 				String commandString = Parser.stripCommand(me.getMessage());
 
 				//Local instance commands
-				Command helpCommand = new HelpCommand();
-				Command nickServCommand = new NickServCommand();
-				Command logCommand = new LogCommand();
-				Command quitCommand = new QuitCommand();
-				Command nickCommand = new NickCommand();
-				Command leaveCommand = new LeaveCommand();
 				
-				//Probably doesn't work! -> Command userCommand = new UserCommand();
+				
+//				Command helpCommand = new HelpCommand();
+//				Command nickServCommand = new NickServCommand();
+//				Command logCommand = new LogCommand();
+//				Command quitCommand = new QuitCommand();
+//				Command nickCommand = new NickCommand();
+//				Command leaveCommand = new LeaveCommand();
+				
 
 				//Put identifier and associated command
-				commandsMap.put("nickserv", nickServCommand);
-				commandsMap.put("log", logCommand);
-				commandsMap.put("help", helpCommand);
-				commandsMap.put("quit", quitCommand);
-				commandsMap.put("nick", nickCommand);
-				commandsMap.put("leave", leaveCommand);
+				commandsMap.put("nickserv", new NickServCommand());
+				commandsMap.put("log", new LogCommand());
+				commandsMap.put("help", new HelpCommand());
+				commandsMap.put("quit", new QuitCommand());
+				commandsMap.put("nick", new NickCommand());
+				commandsMap.put("leave", new LeaveCommand());
 				commandsMap.put("join", joinCommand);
-				// Probably doesn't work! I mean totally doesn't work yet!!! -> commandsMap.put("user", userCommand);
 
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this);
-
-					privateExecutorService.execute(commandsMap.get(commandString));
+					
+					Thread thread = new Thread(commandsMap.get(commandString));
+					thread.start();
 				}
 				else {
 					me.getSession().sayPrivate(me.getNick(), "Not a command.");
