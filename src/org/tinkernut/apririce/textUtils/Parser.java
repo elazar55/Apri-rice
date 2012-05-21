@@ -18,11 +18,23 @@ public class Parser {
 			return "";
 		}
 	}
+	@Deprecated
 	public static String getFirstArgument(String args) {
 		if (args.contains(" ")) {			
 			return args.substring(0, args.indexOf(' '));
 		}else {
 			return args;
 		}
+	}
+	
+	public static String getArgument(String args, int argc) {
+		String buffer = args;
+		for (int i = 0; i < argc - 1; i++) {
+			buffer = stripArguments(buffer);
+		}
+		if (buffer.contains(" ")) {
+			buffer = buffer.substring(0, buffer.indexOf(" "));
+		}
+		return buffer;
 	}
 }

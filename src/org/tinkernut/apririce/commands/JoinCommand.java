@@ -8,6 +8,7 @@ public class JoinCommand extends Command{
 	@Override
 	void exec() {
 		me.getChannel().say(params);
+		me.getChannel().say(Parser.getArgument(params, 1));
 		
 //		Thread thread = new Thread(new Bot(Parser.stripArguments(params.toLowerCase()), Parser.stripArguments(params.toLowerCase()), Parser.stripArguments(params.toLowerCase())));
 //		thread.start();
