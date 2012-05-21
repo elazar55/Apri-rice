@@ -46,8 +46,6 @@ public class Bot implements IRCEventListener, Runnable {
 	public LinkedList<User> userList;
 	private String password = "";
 	//Global instance commands
-	private Command announceCommand;
-	private Command joinCommand = new JoinCommand();
 
 	/**
 	 * Class constructor
@@ -55,8 +53,16 @@ public class Bot implements IRCEventListener, Runnable {
 	public Bot(String server, String channel, String botName) {
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
-
-		announceCommand = new AnnounceCommand();
+		//Put identifier and associated command
+		commandsMap.put("help", new HelpCommand());
+		commandsMap.put("nickserv", new NickServCommand());
+		commandsMap.put("define",new DefineCommand());
+		commandsMap.put("announce", new AnnounceCommand());
+		commandsMap.put("log", new LogCommand());
+		commandsMap.put("quit", new QuitCommand());
+		commandsMap.put("nick", new NickCommand());
+		commandsMap.put("leave", new LeaveCommand());
+		commandsMap.put("join", new JoinCommand());
 
 		userList = new LinkedList<User>();
 
@@ -72,7 +78,7 @@ public class Bot implements IRCEventListener, Runnable {
 
 			if (configFile.exists()) {
 				bReader = new BufferedReader(new FileReader(configFile));
-				
+
 				String nick = bReader.readLine();
 				password = bReader.readLine();
 				isUsingPassword = true;
@@ -129,7 +135,7 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
-			
+
 			if (isUsingPassword) {
 				jce.getSession().sayPrivate("nickserv", "identify " + password);
 			}
@@ -166,29 +172,6 @@ public class Bot implements IRCEventListener, Runnable {
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
 
-				//Local instance commands
-				
-				
-//				Command helpCommand = new HelpCommand();
-//				Command defineCommand = new DefineCommand();
-//				Command logCommand = new LogCommand();
-//				Command quitCommand = new QuitCommand();
-//				Command nickCommand = new NickCommand();
-//				Command leaveCommand = new LeaveCommand();
-				
-				
-				//I doubt this works yet -> Command userCommand = new UserCommand();
-
-				//Put identifier and associated command
-				commandsMap.put("help", new HelpCommand());
-				commandsMap.put("define",new DefineCommand());
-				commandsMap.put("announce", announceCommand);
-				commandsMap.put("log", new LogCommand());
-				commandsMap.put("quit", new QuitCommand());
-				commandsMap.put("nick", new NickCommand());
-				commandsMap.put("leave", new LeaveCommand());
-				commandsMap.put("join", joinCommand);
-
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).init(Parser.stripArguments(me.getMessage()), me, this);
 
@@ -217,29 +200,9 @@ public class Bot implements IRCEventListener, Runnable {
 				//Check and execute any commands
 				String commandString = Parser.stripCommand(me.getMessage());
 
-				//Local instance commands
-				
-				
-//				Command helpCommand = new HelpCommand();
-//				Command nickServCommand = new NickServCommand();
-//				Command logCommand = new LogCommand();
-//				Command quitCommand = new QuitCommand();
-//				Command nickCommand = new NickCommand();
-//				Command leaveCommand = new LeaveCommand();
-				
-
-				//Put identifier and associated command
-				commandsMap.put("nickserv", new NickServCommand());
-				commandsMap.put("log", new LogCommand());
-				commandsMap.put("help", new HelpCommand());
-				commandsMap.put("quit", new QuitCommand());
-				commandsMap.put("nick", new NickCommand());
-				commandsMap.put("leave", new LeaveCommand());
-				commandsMap.put("join", joinCommand);
-
 				if (commandsMap.containsKey(commandString)) {
 					commandsMap.get(commandString).initPriv(Parser.stripArguments(me.getMessage()), me, this);
-					
+
 					Thread thread = new Thread(commandsMap.get(commandString));
 					thread.start();
 				}
