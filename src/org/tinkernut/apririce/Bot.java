@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.commands.DefineCommand;
+import org.tinkernut.apririce.commands.HashCommand;
 import org.tinkernut.apririce.commands.HelpCommand;
 import org.tinkernut.apririce.commands.JoinCommand;
 import org.tinkernut.apririce.commands.LogCommand;
@@ -63,6 +64,7 @@ public class Bot implements IRCEventListener, Runnable {
 		commandsMap.put("nick", new NickCommand());
 		commandsMap.put("leave", new LeaveCommand());
 		commandsMap.put("join", new JoinCommand());
+		commandsMap.put("hash", new HashCommand());
 
 		userList = new LinkedList<User>();
 
