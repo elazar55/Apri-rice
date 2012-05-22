@@ -4,9 +4,10 @@ import org.tinkernut.apririce.Bot;
 import jerklib.events.MessageEvent;
 
 public abstract class Command implements Runnable{
+	//TODO: Pass User to constructor, hence finish user tracking!
 	protected String params;
 	protected MessageEvent me;
-	final private String helpText = "Some help text.";
+	final protected String helpText = "Some help text.";
 	
 	public void init(String params, MessageEvent me, Bot bot) {
 		this.params = params;
