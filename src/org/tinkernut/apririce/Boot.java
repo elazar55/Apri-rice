@@ -34,14 +34,14 @@ public class Boot {
 
 			// Count number of channels as to make enough threads and put the server and respectivechannel in
 			// respective lists whilst ignoring lines starting with a commentSymbol
-			
+
 			while ((fileBuffer = bReader.readLine()) != null) {
 				if (!fileBuffer.startsWith(commentSymbol)) {					
 					numberOfChannels++;
-					
+
 					String server = fileBuffer.substring(0, fileBuffer.indexOf("/"));
 					String channel = fileBuffer.substring(fileBuffer.indexOf("/") + 1);
-					
+
 					serverList.push(server);
 					channelList.push(channel);
 				}
@@ -65,7 +65,7 @@ public class Boot {
 
 			try {
 				bReader = new BufferedReader(new FileReader(channelFile));
-				
+
 				Iterator<String> serverListIterator = serverList.iterator();
 				Iterator<String> channelListIterator = channelList.iterator();
 
@@ -73,10 +73,10 @@ public class Boot {
 					String server = serverListIterator.next();
 					String channel = channelListIterator.next();
 					String nick = "Apri-rice_" + channel.replace("#", "");
-					
+
 					System.out.println(serverList.getLast());
 					System.out.println(channelList.getLast());
-					
+
 					Thread thread = new Thread(new Bot(server, channel, nick));
 					thread.start();
 				}
@@ -90,8 +90,15 @@ public class Boot {
 				e.printStackTrace();
 			}
 		}
-//		while (true) {
-//			System.out.println(Thread.activeCount());
-//		}
+		while (true) {
+			int lastThreadCount = Thread.activeCount();
+
+			for (int i = 0; i < 8; i++) {				
+				if (Thread.activeCount() == i && lastThreadCount != i) {
+					System.out.println("Total thread count changed to "+ i);
+				}
+
+			}
+		}
 	}
 }
