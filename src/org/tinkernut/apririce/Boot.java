@@ -1,6 +1,5 @@
 package org.tinkernut.apririce;
 
-import java.awt.List;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,8 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import com.sun.swing.internal.plaf.basic.resources.basic;
 
 public class Boot {
 	public static void main(String[] args) {
