@@ -87,10 +87,6 @@ public class HashCommand extends Command{
 				TextBuffer.addAndDisplay("Internal error, no such algorithm \"SHA-512\"", me);
 			}
 		}
-		// Help
-		else if (Parser.stripArguments(params).equalsIgnoreCase("help")) {
-			TextBuffer.addAndDisplay(helpText, me);
-		}
 		// Default case
 		else {
 			TextBuffer.addAndDisplay("No such algorithm is implemented (yet).", me);
