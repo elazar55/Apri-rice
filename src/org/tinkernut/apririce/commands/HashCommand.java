@@ -13,14 +13,14 @@ public class HashCommand extends Command{
 
 	@Override
 	void exec() {
-		if (Parser.getArgCount(params) < 1) {
+		if (Parser.stripArguments(params).equals("")) {
 			TextBuffer.addAndDisplay(helpText, me);
 		}
 		// MD2
 		else if (Parser.getArgument(params, 1).equalsIgnoreCase("md2")) {
 			try {
 				mDigest = MessageDigest.getInstance("MD2");
-				mDigest.update(Parser.getArgument(params, 2).getBytes());
+				mDigest.update(Parser.stripArguments(params).getBytes());
 				TextBuffer.addAndDisplay(new BigInteger(1, mDigest.digest()).toString(16), me);
 			} catch (NoSuchAlgorithmException e) {
 				System.out.println("Internal error, no such algorithm \"MD2\"");
@@ -32,7 +32,7 @@ public class HashCommand extends Command{
 		else if (Parser.getArgument(params, 1).equalsIgnoreCase("md5")) {			
 			try {
 				mDigest = MessageDigest.getInstance("MD5");
-				mDigest.update(Parser.getArgument(params, 2).getBytes());
+				mDigest.update(Parser.stripArguments(params).getBytes());
 				TextBuffer.addAndDisplay(new BigInteger(1, mDigest.digest()).toString(16), me);
 			} catch (NoSuchAlgorithmException e) {
 				System.out.println("Internal error, no such algorithm \"MD5\"");
@@ -44,7 +44,7 @@ public class HashCommand extends Command{
 				Parser.getArgument(params, 1).equalsIgnoreCase("sha-1")) {
 			try {
 				mDigest = MessageDigest.getInstance("SHA-1");
-				mDigest.update(Parser.getArgument(params, 2).getBytes());
+				mDigest.update(Parser.stripArguments(params).getBytes());
 				TextBuffer.addAndDisplay(new BigInteger(1, mDigest.digest()).toString(16), me);
 			} catch (NoSuchAlgorithmException e) {
 				System.out.println("Internal error, no such algorithm \"SHA1\"");
@@ -56,7 +56,7 @@ public class HashCommand extends Command{
 				Parser.getArgument(params, 1).equalsIgnoreCase("sha-256")) {
 			try {
 				mDigest = MessageDigest.getInstance("SHA-256");
-				mDigest.update(Parser.getArgument(params, 2).getBytes());
+				mDigest.update(Parser.stripArguments(params).getBytes());
 				TextBuffer.addAndDisplay(new BigInteger(1, mDigest.digest()).toString(16), me);
 			} catch (NoSuchAlgorithmException e) {
 				System.out.println("Internal error, no such algorithm \"SHA-256\"");
@@ -68,7 +68,7 @@ public class HashCommand extends Command{
 				Parser.getArgument(params, 1).equalsIgnoreCase("sha-384")) {
 			try {
 				mDigest = MessageDigest.getInstance("SHA-384");
-				mDigest.update(Parser.getArgument(params, 2).getBytes());
+				mDigest.update(Parser.stripArguments(params).getBytes());
 				TextBuffer.addAndDisplay(new BigInteger(1, mDigest.digest()).toString(16), me);
 			} catch (NoSuchAlgorithmException e) {
 				System.out.println("Internal error, no such algorithm \"SHA-384\"");
@@ -80,7 +80,7 @@ public class HashCommand extends Command{
 				Parser.getArgument(params, 1).equalsIgnoreCase("sha-512")) {
 			try {
 				mDigest = MessageDigest.getInstance("SHA-512");
-				mDigest.update(Parser.getArgument(params, 2).getBytes());
+				mDigest.update(Parser.stripArguments(params).getBytes());
 				TextBuffer.addAndDisplay(new BigInteger(1, mDigest.digest()).toString(16), me);
 			} catch (NoSuchAlgorithmException e) {
 				System.out.println("Internal error, no such algorithm \"SHA-512\"");
@@ -88,7 +88,7 @@ public class HashCommand extends Command{
 			}
 		}
 		// Help
-		else if (Parser.getArgument(params, 2).equalsIgnoreCase("help")) {
+		else if (Parser.stripArguments(params).equalsIgnoreCase("help")) {
 			TextBuffer.addAndDisplay(helpText, me);
 		}
 		// Default case

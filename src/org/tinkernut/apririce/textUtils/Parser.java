@@ -37,6 +37,7 @@ public class Parser {
 		return buffer;
 	}
 
+	@Deprecated
 	public static int getArgCount(String args) {
 		String buffer = args;
 		int argC = 0;
