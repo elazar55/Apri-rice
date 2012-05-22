@@ -3,6 +3,7 @@ package org.tinkernut.apririce.textUtils;
 import jerklib.events.MessageEvent;
 
 public class TextBuffer {
+	//TODO: Overload display() function as to take a User, as to display private messages.
 
 	private static String tBuffer = "";
 
