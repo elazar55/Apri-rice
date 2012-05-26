@@ -1,12 +1,16 @@
 package org.tinkernut.apririce;
 
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import org.tinkernut.apririce.commands.AnnounceCommand;
 import org.tinkernut.apririce.commands.Command;
@@ -44,7 +48,8 @@ public class Bot implements IRCEventListener, Runnable {
 	private BufferedWriter bWriter;
 	private BufferedReader bReader;
 	private String botName;
-	public LinkedList<User> userList;
+	public LinkedList<User> usersList;
+	private File usersFile;
 	private String password = "";
 	//Global instance commands
 
@@ -66,7 +71,17 @@ public class Bot implements IRCEventListener, Runnable {
 		commandsMap.put("join", new JoinCommand());
 		commandsMap.put("hash", new HashCommand());
 
-		userList = new LinkedList<User>();
+		usersList = new LinkedList<User>();
+		usersFile = new File("usersFile.txt");
+
+		if (!usersFile.exists()) {
+			try {
+				usersFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("File " + usersFile.getName() + " inaccessible.");
+			}
+		}
 
 		ircServer = server;
 		channelName = channel;
@@ -137,7 +152,40 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
+			
+			String buffer = "";
+			LinkedList<User> usersFileList = new LinkedList<User>();
+			
+			try {
+				bReader = new BufferedReader(new FileReader(usersFile));
+				
+				// usersFile.txt to a LinkedList; usersFileList
+				while ((buffer = bReader.readLine()) != null) {
+					usersFileList.add(new User(buffer));
+				}
+				
+				bReader.close();
 
+				// Step 1: Put any user in usersFile.txt into usersList
+				for (User user : usersFileList) {
+					usersList.add(new User(user.getNick()));
+				}
+				
+				//Step 2: If channel contains any users that are not in usersList, add them.
+				for (String nick : jce.getChannel().getNicks()) {
+					if (!usersList.contains(new User(nick))) {
+						jce.getChannel().say("New user detected, " + nick + ".");
+						System.out.println("New user detected, " + nick + ".");
+					}
+				}
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+				System.out.println("File " + usersFile.getName() + " doesn't exist... it should.");
+			} catch (IOException e1) {
+				System.out.println("File " + usersFile.getName() + " doesn't exist... it should.");
+				e1.printStackTrace();
+			}
+			
 			if (isUsingPassword) {
 				jce.getSession().sayPrivate("nickserv", "identify " + password);
 			}
@@ -147,10 +195,7 @@ public class Bot implements IRCEventListener, Runnable {
 			// User successfuly joins channel
 		} else if (type == Type.JOIN) {
 			JoinEvent je = (JoinEvent) e;
-			// Create User instance variable for each new user in userList
-			if (!userList.contains(new User(je.getNick()))) {
-				userList.add(new User(je.getNick().toLowerCase()));
-			}
+
 			// User successfuly leaves channel
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
