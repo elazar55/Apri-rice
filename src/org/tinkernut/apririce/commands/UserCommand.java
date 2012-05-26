@@ -1,4 +1,4 @@
-/*
+
 package org.tinkernut.apririce.commands;
 
 import jerklib.Channel;
@@ -8,8 +8,9 @@ import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.Rank;
 import org.tinkernut.apririce.User;
 import org.tinkernut.apririce.textUtils.Parser;
+@SuppressWarnings("unused")
 @Deprecated //TODO: Rewrite this
-public class UserCommand extends Command{
+public class UserCommand { /*
 	Bot bot;
 
 	@Override
@@ -86,5 +87,5 @@ public class UserCommand extends Command{
 			me.getSession().sayPrivate(me.getNick(), "User does not exist.");
 		}
 	}
+	*/
 }
-*/
