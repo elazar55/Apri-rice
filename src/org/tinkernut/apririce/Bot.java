@@ -9,17 +9,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
-import org.tinkernut.apririce.commands.AnnounceCommand;
+import java.lang.Class;
 import org.tinkernut.apririce.commands.Command;
-import org.tinkernut.apririce.commands.DefineCommand;
-import org.tinkernut.apririce.commands.HashCommand;
-import org.tinkernut.apririce.commands.HelpCommand;
-import org.tinkernut.apririce.commands.JoinCommand;
-import org.tinkernut.apririce.commands.LogCommand;
-import org.tinkernut.apririce.commands.NickCommand;
-import org.tinkernut.apririce.commands.NickServCommand;
-import org.tinkernut.apririce.commands.QuitCommand;
-import org.tinkernut.apririce.commands.LeaveCommand;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
@@ -60,17 +51,38 @@ public class Bot implements IRCEventListener, Runnable {
 
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
-		//Put identifier and associated command
-		commandsMap.put("help", new HelpCommand());
-		commandsMap.put("nickserv", new NickServCommand());
-		commandsMap.put("define",new DefineCommand());
-		commandsMap.put("announce", new AnnounceCommand());
-		commandsMap.put("log", new LogCommand());
-		commandsMap.put("quit", new QuitCommand());
-		commandsMap.put("nick", new NickCommand());
-		commandsMap.put("leave", new LeaveCommand());
-		commandsMap.put("join", new JoinCommand());
-		commandsMap.put("hash", new HashCommand());
+		// Count number of commands for for loop
+		int numberOfCommands = new File("src\\org\\tinkernut\\apririce\\commands\\").listFiles().length;
+		// Each file into commandsFilesArray array
+		File commandsFilesArray[] = new File("src\\org\\tinkernut\\apririce\\commands\\").listFiles();
+		String className = "";
+
+		for (int i = 0; i < numberOfCommands; i++) {
+			try {
+				className = commandsFilesArray[i].getName().substring(0, commandsFilesArray[i].getName().indexOf("."));
+				if (className.equals("Command")) {
+					continue;
+				}
+				
+				// File string to Command type
+				@SuppressWarnings("rawtypes")
+				Class c = Class.forName("org.tinkernut.apririce.commands." + className);
+				
+				commandsMap.put(className.substring(0, className.indexOf("Command")).toLowerCase(), (Command) c.newInstance());
+			} catch (ClassNotFoundException e) {
+				System.out.println("Internal error; class " + className +" not found.");
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				System.out.println("Internal error; class " + className +" not found.");
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				System.out.println("Internal error; class " + className +" not found.");
+				e.printStackTrace();
+			} catch (ClassCastException e) {
+				System.out.println(className + " does not extend Command. Skipping.");
+				continue;
+			}
+		}
 
 		usersList = new LinkedList<User>();
 		usersFile = new File(this.channelName + "_usersFile.txt");
