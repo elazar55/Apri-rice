@@ -1,9 +1,11 @@
 package org.tinkernut.apririce;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -18,6 +20,7 @@ public class Boot {
 
 		File channelFile = new File("channels.txt");
 		BufferedReader bReader;
+		BufferedWriter bWriter;
 		String fileBuffer = "";
 		int numberOfChannels = 0;
 		LinkedList<String> serverList = new LinkedList<String>();
@@ -28,6 +31,10 @@ public class Boot {
 			// Create channels file if it doesn't exist
 			if (!channelFile.exists()) {
 				channelFile.createNewFile();
+				bWriter = new BufferedWriter(new FileWriter(channelFile));
+				bWriter.write("|| Lines starting with || are ignored. Format this like so : irc.server.com/#someChannel\r\n" + 
+						"|| A config file for the channel will be generated, in which you can then edit the nick and password.");
+				bWriter.close();
 			}
 
 			bReader = new BufferedReader(new FileReader(channelFile));
@@ -60,6 +67,7 @@ public class Boot {
 		// If user didn't edit the channels config, quit
 		if (numberOfChannels < 1) {
 			System.out.println("Put the server and channel info in " + channelFile.getName());
+			System.exit(0);
 		}else {
 			// Loop to make threads, whilst inputing appropriate stuff into constructor. Gawd I suck at comments
 

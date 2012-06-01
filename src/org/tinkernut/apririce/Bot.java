@@ -97,20 +97,27 @@ public class Bot implements IRCEventListener, Runnable {
 		}
 
 		// TODO: Create storage
+		
 		// Optional nick (other than default) and password read from config file for specific channel
-
 		File configFile = new File(channelName + "_config.txt");
 
 		try {
 
 			if (configFile.exists()) {
 				bReader = new BufferedReader(new FileReader(configFile));
-
-				String nick = bReader.readLine();
-				password = bReader.readLine();
+				
+				String buffer = "";
+				String nick = "";
+				
+				while ((buffer = bReader.readLine())!= null) {
+					if (!buffer.startsWith("||")) {
+						nick = buffer;
+						password = bReader.readLine();						
+					}
+				}
 				isUsingPassword = true;
 
-				if (nick == null) {
+				if (nick.equals("")) {
 					nick = this.botName;
 					System.out.println("No nick specified in " + configFile.getName() + ". Using default.");			
 				}else {
@@ -124,12 +131,16 @@ public class Bot implements IRCEventListener, Runnable {
 				}
 
 				con = new ConnectionManager(new Profile(this.botName));
+				bReader.close();
 			}else {			
 				// Bot profile (nick)
 				System.out.println("No " + configFile.getName() + " in directory. Creating "+ configFile.getName() +" and using default nick and password (no password by default).");
 				con = new ConnectionManager(new Profile(this.botName));
 
 				configFile.createNewFile();
+				bWriter = new BufferedWriter(new FileWriter(configFile));
+				bWriter.write("||Nick on first line, password on next line. Leave next line blank if no password.");
+				bWriter.close();
 			}
 		} catch (IOException e) {
 			System.out.println("File " + configFile.getName() + " inaccessible.");
