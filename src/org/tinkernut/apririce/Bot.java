@@ -56,7 +56,7 @@ public class Bot implements IRCEventListener, Runnable {
 		// If directory doesn't exist
 		if (!commandsDirectory.exists()) {
 			System.out.println("There are no commands installed. Create or get some commands and place them in src\\org\\tinkernut\\apririce\\commands\nExiting.");
-			commandsDirectory.mkdir();
+			commandsDirectory.mkdirs();
 			// Exist completely if doesn't exist
 			System.exit(1);
 		}
