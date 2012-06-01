@@ -51,8 +51,14 @@ public class Bot implements IRCEventListener, Runnable {
 
 		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
-		// Count number of commands for for loop
-		int numberOfCommands = new File("src\\org\\tinkernut\\apririce\\commands\\").listFiles().length;
+		// Count number of commands for for loop if directory exists
+		File commandsDirectory = new File("src\\org\\tinkernut\\apririce\\commands\\");
+		if (!commandsDirectory.exists()) {
+			System.out.println("There are no commands installed. Create or get some commands and place them in src\\org\\tinkernut\\apririce\\commands\nExiting.");
+			commandsDirectory.mkdir();
+			System.exit(1);
+		}
+		int numberOfCommands = commandsDirectory.listFiles().length;
 		// Each file into commandsFilesArray array
 		File commandsFilesArray[] = new File("src\\org\\tinkernut\\apririce\\commands\\").listFiles();
 		String className = "";
@@ -63,11 +69,11 @@ public class Bot implements IRCEventListener, Runnable {
 				if (className.equals("Command")) {
 					continue;
 				}
-				
+
 				// File string to Command type
 				@SuppressWarnings("rawtypes")
 				Class c = Class.forName("org.tinkernut.apririce.commands." + className);
-				
+
 				commandsMap.put(className.substring(0, className.indexOf("Command")).toLowerCase(), (Command) c.newInstance());
 			} catch (ClassNotFoundException e) {
 				System.out.println("Internal error; class " + className +" not found.");
@@ -97,7 +103,7 @@ public class Bot implements IRCEventListener, Runnable {
 		}
 
 		// TODO: Create storage
-		
+
 		// Optional nick (other than default) and password read from config file for specific channel
 		File configFile = new File(channelName + "_config.txt");
 
@@ -105,10 +111,10 @@ public class Bot implements IRCEventListener, Runnable {
 
 			if (configFile.exists()) {
 				bReader = new BufferedReader(new FileReader(configFile));
-				
+
 				String buffer = "";
 				String nick = "";
-				
+
 				while ((buffer = bReader.readLine())!= null) {
 					if (!buffer.startsWith("||")) {
 						nick = buffer;
