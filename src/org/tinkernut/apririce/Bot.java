@@ -53,11 +53,14 @@ public class Bot implements IRCEventListener, Runnable {
 		commandsMap = new HashMap<String, Command>();
 		// Count number of commands for for loop if directory exists
 		File commandsDirectory = new File("src\\org\\tinkernut\\apririce\\commands\\");
+		// If directory doesn't exist
 		if (!commandsDirectory.exists()) {
 			System.out.println("There are no commands installed. Create or get some commands and place them in src\\org\\tinkernut\\apririce\\commands\nExiting.");
 			commandsDirectory.mkdir();
+			// Exist completely if doesn't exist
 			System.exit(1);
 		}
+		// And if it does exist...
 		int numberOfCommands = commandsDirectory.listFiles().length;
 		// Each file into commandsFilesArray array
 		File commandsFilesArray[] = new File("src\\org\\tinkernut\\apririce\\commands\\").listFiles();
