@@ -77,7 +77,9 @@ public class Bot implements IRCEventListener, Runnable {
 				@SuppressWarnings("rawtypes")
 				Class c = Class.forName("org.tinkernut.apririce.commands." + className);
 
-				commandsMap.put(className.substring(0, className.indexOf("Command")).toLowerCase(), (Command) c.newInstance());
+				if (className.contains("Command")) {					
+					commandsMap.put(className.substring(0, className.indexOf("Command")).toLowerCase(), (Command) c.newInstance());
+				}
 			} catch (ClassNotFoundException e) {
 				System.out.println("Internal error; class " + className +" not found.");
 				e.printStackTrace();
