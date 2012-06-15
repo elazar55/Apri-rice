@@ -3,10 +3,14 @@ package org.tinkernut.apririce;
 public class User {
 	public int warnings = 0;
 	private String nick;
-	public Rank rank = Rank.Standard;
+	public Rank rank = null;
 	
-	public User(String nick) {
+	/*
+	 * Class Constructors
+	 */
+	public User(String nick, Rank rank) {
 		this.nick = nick;
+		this.rank = rank;
 	}
 	
 	public String getNick() {

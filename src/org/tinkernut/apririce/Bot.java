@@ -39,18 +39,20 @@ public class Bot implements IRCEventListener, Runnable {
 	public LinkedList<User> usersList;
 	private File usersFile;
 	private String password = "";
+	public int floodCounter;
 	//Global instance commands
 
 	/**
 	 * Class constructor
 	 */
 	public Bot(String server, String channel, String botName) {
+		// Initialize globals		
 		ircServer = server;
 		channelName = channel;
 		this.botName = botName;
-
-		// Initialize globals		
 		commandsMap = new HashMap<String, Command>();
+		floodCounter = 0;
+		
 		// Count number of commands for for loop if directory exists
 		File commandsDirectory = new File("src\\org\\tinkernut\\apririce\\commands\\");
 		// If directory doesn't exist
@@ -195,22 +197,31 @@ public class Bot implements IRCEventListener, Runnable {
 
 				// usersFile.txt to a LinkedList; usersFileList
 				while ((buffer = bReader.readLine()) != null) {
-					usersFileList.add(new User(buffer));
+					String nick = buffer.substring(0, buffer.indexOf(" "));
+					Rank rank = null;
+					
+					if (buffer.substring(buffer.indexOf(" ") + 1).equalsIgnoreCase("admin")) {
+						rank = Rank.Admin;
+					} else {
+						rank = Rank.Standard;
+					}
+					
+					usersFileList.add(new User(nick, rank));
 				}
 
 				bReader.close();
 
-				// Step 1: Put any user in usersFile.txt into usersList
+				// Step 1: Put any user in usersFile.txt(usersFileList) into usersList
 				for (User user : usersFileList) {
-					usersList.add(new User(user.getNick()));
+					usersList.add(user);
 				}
 
 				// Step 2: If channel contains any users that are not in usersList, add them.
 				for (String nick : jce.getChannel().getNicks()) {
-					if (!usersList.contains(new User(nick))) {
+					if (!usersList.contains(new User(nick, Rank.Standard)) || !usersList.contains(new User(nick, Rank.Admin))) {
 						jce.getChannel().say("New user detected, " + nick + ".");
 						System.out.println("New user detected, " + nick + ".");
-						usersList.add(new User(nick));
+						usersList.add(new User(nick, Rank.Standard));
 					}
 				}
 
@@ -219,7 +230,7 @@ public class Bot implements IRCEventListener, Runnable {
 				for (User user : usersList) {
 					if (!usersFileList.contains(user)) {
 						usersFileList.add(user);
-						bWriter.write(user.getNick());
+						bWriter.write(user.getNick() + " " + user.rank.toString());
 						bWriter.newLine();
 					}
 				}
@@ -235,7 +246,6 @@ public class Bot implements IRCEventListener, Runnable {
 			if (isUsingPassword) {
 				jce.getSession().sayPrivate("nickserv", "identify " + password);
 			}
-
 
 			// User successfuly joins channel
 		} else if (type == Type.JOIN) {
