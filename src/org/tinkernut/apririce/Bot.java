@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.lang.Class;
 import org.tinkernut.apririce.commands.Command;
 import org.tinkernut.apririce.textUtils.Parser;
+import org.tinkernut.apririce.textUtils.TextBuffer;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
@@ -39,7 +40,11 @@ public class Bot implements IRCEventListener, Runnable {
 	public LinkedList<User> usersList;
 	private File usersFile;
 	private String password = "";
-	public int floodCounter;
+	private int floodCounter;
+	private final int maximumFlood = 10;
+	private long lastMessageTime;
+	private final int floodDeclineInterval = 2000;
+	private boolean isFloodChecking = false;
 	//Global instance commands
 
 	/**
@@ -52,6 +57,7 @@ public class Bot implements IRCEventListener, Runnable {
 		this.botName = botName;
 		commandsMap = new HashMap<String, Command>();
 		floodCounter = 0;
+		lastMessageTime = 0;
 		
 		// Count number of commands for for loop if directory exists
 		File commandsDirectory = new File("src\\org\\tinkernut\\apririce\\commands\\");
@@ -196,10 +202,17 @@ public class Bot implements IRCEventListener, Runnable {
 				bReader = new BufferedReader(new FileReader(usersFile));
 
 				// usersFile.txt to a LinkedList; usersFileList
-				while ((buffer = bReader.readLine()) != null) {
-					String nick = buffer.substring(0, buffer.indexOf(" "));
+				while ((buffer = bReader.readLine()) != null) {					
 					Rank rank = null;
+					String nick = "";
 					
+					if (buffer.contains(" ")) {
+						nick = buffer.substring(0, buffer.indexOf(" "));						
+					} else {						
+						nick = buffer;						
+					}
+					
+					// Check if rank admin exists in txt file. If so, rank = admin, else, rank = standard
 					if (buffer.substring(buffer.indexOf(" ") + 1).equalsIgnoreCase("admin")) {
 						rank = Rank.Admin;
 					} else {
@@ -270,6 +283,28 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 
 			MessageEvent me = (MessageEvent) e;
+			
+			// Flood checking
+			if (isFloodChecking ) {				
+				if (System.currentTimeMillis() - lastMessageTime < floodDeclineInterval) {
+					floodCounter++;
+				} else {
+					if (floodCounter > 0) {
+						floodCounter--;
+					}
+				}
+				
+				TextBuffer.addAndDisplay("Flood counter is: " + floodCounter, me);
+				TextBuffer.addAndDisplay("System time - last message time = " + Long.toString(System.currentTimeMillis() - lastMessageTime), me);
+				
+				if (floodCounter == maximumFlood) {
+					TextBuffer.addAndDisplay("Maximum speed!", me);
+					floodCounter = 0;
+				}
+				
+				lastMessageTime = System.currentTimeMillis();
+			}
+			
 			//Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());
