@@ -283,7 +283,7 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 
 			MessageEvent me = (MessageEvent) e;
-			
+			// TODO: Per user flood control
 			// Flood checking
 			if (isFloodChecking ) {				
 				if (System.currentTimeMillis() - lastMessageTime < floodDeclineInterval) {
