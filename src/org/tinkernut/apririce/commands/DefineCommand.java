@@ -1,4 +1,3 @@
-// TODO: Finish DefineCommand
 package org.tinkernut.apririce.commands;
 
 import java.io.BufferedReader;

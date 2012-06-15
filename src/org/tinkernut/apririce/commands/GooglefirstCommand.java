@@ -16,7 +16,6 @@ public class GooglefirstCommand extends Command {
 
 	@Override
 	void exec() {
-		// TODO Auto-generated method stub
 		String googlesearch = params;
 			String google = "http://ajax.googleapis.com/ajax/services/search/web?v=1.0&q=";
 		    String search = googlesearch;
@@ -36,14 +35,12 @@ public class GooglefirstCommand extends Command {
 				String searchresult = str2.replace("</b>", "");
 				TextBuffer.addAndDisplay(searchresult, me);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 	}
 
 	@Override
 	void execPriv() {
-		// TODO Auto-generated method stub
 		System.out.println("Done!");
 	}
 

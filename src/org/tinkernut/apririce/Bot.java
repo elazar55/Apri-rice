@@ -184,6 +184,7 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
+			
 			//TODO: Rewrite user logging, saving, etc,.
 
 			String buffer = "";
