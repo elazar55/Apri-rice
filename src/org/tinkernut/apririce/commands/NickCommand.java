@@ -9,7 +9,7 @@ public class NickCommand extends Command{
 
 	@Override
 	void exec() {
-		if (Parser.getFirstArgument(params).equalsIgnoreCase("help")) {
+		if (Parser.getArgument(params, 1).equalsIgnoreCase("help")) {
 			TextBuffer.addAndDisplay(helpText, me);
 			return;
 		}
@@ -18,7 +18,7 @@ public class NickCommand extends Command{
 
 	@Override
 	void execPriv() {
-		if (Parser.getFirstArgument(params).equalsIgnoreCase("help")) {
+		if (Parser.getArgument(params, 1).equalsIgnoreCase("help")) {
 			me.getSession().sayPrivate(me.getNick(), helpText);
 			return;
 		}

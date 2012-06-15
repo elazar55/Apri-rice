@@ -1,6 +1,5 @@
 package org.tinkernut.apririce.commands;
 
-import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.textUtils.Parser;
 
 public class JoinCommand extends Command{

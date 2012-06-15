@@ -31,21 +31,21 @@ public class DefineCommand extends Command {
 		if (params.contains(" ")) {			
 			try {
 
-				if (urlMap.containsKey(Parser.getFirstArgument(params.toLowerCase()))) {
+				if (urlMap.containsKey(Parser.getArgument(params.toLowerCase(), 1))) {
 					//Replace special characters in to be defined String
 					String urlAddon = Parser.stripArguments(params);
-					if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PERCENT)) {
+					if (urlMap.get(Parser.getArgument(params, 1)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
 						urlAddon = urlAddon.replace(",", "%2C");
-					}if (urlMap.get(Parser.getFirstArgument(params)).charReplacement.equals(characterReplacement.PLUS)) {
+					}if (urlMap.get(Parser.getArgument(params, 1)).charReplacement.equals(characterReplacement.PLUS)) {
 						urlAddon = urlAddon.replace(" ", "+");
 					}
 
 					//Append definition String to url
-					urlMap.get(Parser.getFirstArgument(params)).url = new URL(urlMap.get(Parser.getFirstArgument(params)).url.toString() + urlAddon); 
+					urlMap.get(Parser.getArgument(params, 1)).url = new URL(urlMap.get(Parser.getArgument(params, 1)).url.toString() + urlAddon); 
 
 					//Establish connection and download HTML source
-					urlConnection = urlMap.get(Parser.getFirstArgument(params)).url.openConnection();
+					urlConnection = urlMap.get(Parser.getArgument(params, 1)).url.openConnection();
 					BufferedReader bReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
 					TextBuffer.addAndDisplay("Connection successful.", me);
 
@@ -59,13 +59,13 @@ public class DefineCommand extends Command {
 					// Remove everything from HTMLSource except definition with unique HTML tags.
 					String unusedStart = "";
 					try {
-						unusedStart = HTMLSource.substring(0, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag));						
+						unusedStart = HTMLSource.substring(0, HTMLSource.indexOf(urlMap.get(Parser.getArgument(params, 1)).startingTag));						
 					} catch (StringIndexOutOfBoundsException e) {
 						TextBuffer.addAndDisplay("Definition doesn't exist, or error.", me);
 						return;
 					}
 
-					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).endingTag, HTMLSource.indexOf(urlMap.get(Parser.getFirstArgument(params)).startingTag)));
+					String unusedEnd = HTMLSource.substring(HTMLSource.indexOf(urlMap.get(Parser.getArgument(params, 1)).endingTag, HTMLSource.indexOf(urlMap.get(Parser.getArgument(params, 1)).startingTag)));
 
 					HTMLSource = HTMLSource.replace(unusedStart, "");
 					HTMLSource = HTMLSource.replace(unusedEnd, "");
@@ -102,7 +102,7 @@ public class DefineCommand extends Command {
 			} catch (IOException e) {
 				TextBuffer.addAndDisplay("Unable to establish connection.", me);
 			}
-		}else if(!urlMap.containsKey(Parser.getFirstArgument(params))){			
+		}else if(!urlMap.containsKey(Parser.getArgument(params, 1))){			
 			TextBuffer.addAndDisplay("Invalid site.", me);
 		}else {			
 			TextBuffer.addAndDisplay("Input something to define.", me);
