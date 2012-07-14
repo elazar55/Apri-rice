@@ -4,6 +4,7 @@ public class User {
 	public int warnings = 0;
 	private String nick;
 	public Rank rank = null;
+	protected int floodCounter = 0;
 	
 	/*
 	 * Class Constructors

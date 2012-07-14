@@ -40,11 +40,11 @@ public class Bot implements IRCEventListener, Runnable {
 	public LinkedList<User> usersList;
 	private File usersFile;
 	private String password = "";
-	private int floodCounter;
 	private final int maximumFlood = 10;
 	private long lastMessageTime;
 	private final int floodDeclineInterval = 2000;
-	private boolean isFloodChecking = false;
+	private final boolean isFloodChecking = true;
+	private final boolean doesCheckFloodAdmins = false;
 	//Global instance commands
 
 	/**
@@ -56,7 +56,6 @@ public class Bot implements IRCEventListener, Runnable {
 		channelName = channel;
 		this.botName = botName;
 		commandsMap = new HashMap<String, Command>();
-		floodCounter = 0;
 		lastMessageTime = 0;
 		
 		// Count number of commands for for loop if directory exists
@@ -103,6 +102,7 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 		}
 
+		// Initiate users with users txt file and users class linkedList
 		usersList = new LinkedList<User>();
 		usersFile = new File(this.channelName + "_usersFile.txt");
 
@@ -260,15 +260,16 @@ public class Bot implements IRCEventListener, Runnable {
 				jce.getSession().sayPrivate("nickserv", "identify " + password);
 			}
 
-			// User successfuly joins channel
+			// User successfully joins channel
 		} else if (type == Type.JOIN) {
 			JoinEvent je = (JoinEvent) e;
+			// TODO: Check if joined user is in usersFileList, if not, add that users to usersFileList
 
-			// User successfuly leaves channel
+			// User successfully leaves channel
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
 
-			// Message successfuly recieved in channel
+			// Message successfully received in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			// Logging.
 			if (isLogging) {
@@ -285,21 +286,29 @@ public class Bot implements IRCEventListener, Runnable {
 			MessageEvent me = (MessageEvent) e;
 			// TODO: Per user flood control
 			// Flood checking
-			if (isFloodChecking ) {				
+			if (isFloodChecking ) {
+				// Check current message time against floodDeclineInterval. Increment user's floodCounter if too low.
 				if (System.currentTimeMillis() - lastMessageTime < floodDeclineInterval) {
-					floodCounter++;
-				} else {
-					if (floodCounter > 0) {
-						floodCounter--;
+					if (doesCheckFloodAdmins) {
+						try {
+							usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter++;
+						} catch (IndexOutOfBoundsException e1) {
+							usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Admin))).floodCounter++;
+						}
+					} else {
+						usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter++;
+					}
+				} else {    // else decrement user's floodCounter
+					if (usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter > 0) {
+						usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter--;
 					}
 				}
 				
-				TextBuffer.addAndDisplay("Flood counter is: " + floodCounter, me);
-				TextBuffer.addAndDisplay("System time - last message time = " + Long.toString(System.currentTimeMillis() - lastMessageTime), me);
-				
-				if (floodCounter == maximumFlood) {
-					TextBuffer.addAndDisplay("Maximum speed!", me);
-					floodCounter = 0;
+				TextBuffer.addAndDisplay(me.getNick() + "'s Flood counter is: " + usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter, me);
+				// If user's floodCounter hit maximumFlood
+				if (usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter == maximumFlood) {
+					me.getChannel().kick(me.getNick(), "Stop flooding.");
+					usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter = 0;
 				}
 				
 				lastMessageTime = System.currentTimeMillis();
@@ -318,7 +327,7 @@ public class Bot implements IRCEventListener, Runnable {
 					me.getChannel().say("Not a command.");
 				}
 			}
-			// Private message successfuly recieved
+			// Private message successfully received
 		} else if (type == Type.PRIVATE_MESSAGE) {
 			// Logging.
 			if (isLogging) {
