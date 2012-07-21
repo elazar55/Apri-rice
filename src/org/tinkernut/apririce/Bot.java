@@ -23,6 +23,8 @@ import jerklib.events.QuitEvent;
 import jerklib.events.IRCEvent.Type;
 import jerklib.listeners.IRCEventListener;
 
+// TODO: Refactor certain operations to methods
+
 public class Bot implements IRCEventListener, Runnable {
 	/**
 	 * Globals
