@@ -13,7 +13,6 @@ public class QuitCommand extends Command {
 	}
 
 	public void exec() {
-		bot.con.quit();
 		System.exit(0);
 	}
 

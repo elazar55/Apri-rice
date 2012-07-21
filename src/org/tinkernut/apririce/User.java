@@ -1,5 +1,9 @@
 package org.tinkernut.apririce;
-
+/**
+ * Class which IRC users are based on. When comparing, only nicks are compared; overrides equals.
+ * @author elazar55
+ *
+ */
 public class User {
 	public int warnings = 0;
 	private String nick;

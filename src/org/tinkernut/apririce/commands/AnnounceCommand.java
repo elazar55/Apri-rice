@@ -49,7 +49,7 @@ public class AnnounceCommand extends Command{
 	}
 
 	public void execPriv() {
-		
+		exec();
 	}
 
 	public void set(int interval) {

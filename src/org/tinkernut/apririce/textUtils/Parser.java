@@ -9,6 +9,11 @@ public class Parser {
 			return cmd.substring(1);
 		}
 	}
+	/**
+	 * Returns everything after the command. i.e. Everything after the |command
+	 * @param args
+	 * @return
+	 */
 	public static String stripArguments(String args) {
 		if (args.contains(" ")) {
 			return args.substring(args.indexOf(" ")+1);
@@ -26,6 +31,13 @@ public class Parser {
 		}
 	}
 
+	/**
+	 * Returns the n'th argument after the |command
+	 * The first argument being 1
+	 * @param args
+	 * @param argc
+	 * @return
+	 */
 	public static String getArgument(String args, int argc) {
 		String buffer = args;
 		for (int i = 0; i < argc - 1; i++) {
