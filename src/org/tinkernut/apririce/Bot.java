@@ -47,7 +47,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private final boolean doesCheckFloodAdmins = false;
 	//Global instance commands
 
-	/**
+	/*
 	 * Class constructor
 	 */
 	public Bot(String server, String channel, String botName) {
@@ -99,19 +99,6 @@ public class Bot implements IRCEventListener, Runnable {
 			} catch (ClassCastException e) {
 				System.out.println(className + " does not extend Command. Skipping.");
 				continue;
-			}
-		}
-
-		// Initiate users with users txt file and users class linkedList
-		usersList = new LinkedList<User>();
-		usersFile = new File(this.channelName + "_usersFile.txt");
-
-		if (!usersFile.exists()) {
-			try {
-				usersFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.out.println("File " + usersFile.getName() + " inaccessible.");
 			}
 		}
 
@@ -194,12 +181,26 @@ public class Bot implements IRCEventListener, Runnable {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
 			
 			//TODO: Rewrite user logging, saving, etc,.
+			/*
+			 * User logging, etc,.
+			 */
+			usersList = new LinkedList<User>();                               // Instantiate new usersList
+			usersFile = new File(this.channelName + "_usersFile.txt");        // Instantiate usersFile with name: ChannelName + "_usersFile.txt"
+
+			if (!usersFile.exists()) {
+				try {
+					usersFile.createNewFile();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					System.out.println("File " + usersFile.getName() + " inaccessible.");
+				}
+			}
 
 			String buffer = "";
-			LinkedList<User> usersFileList = new LinkedList<User>();
+			LinkedList<User> usersFileList = new LinkedList<User>();          // Temporary usersFile LinkedList; usersFileList to represent initial usersFile txt file 
 
 			try {
-				bReader = new BufferedReader(new FileReader(usersFile));
+				bReader = new BufferedReader(new FileReader(usersFile));      // new bufferedReader to usersFile txt file, as to convert to usersFileList
 
 				// usersFile.txt to a LinkedList; usersFileList
 				while ((buffer = bReader.readLine()) != null) {					
@@ -263,7 +264,21 @@ public class Bot implements IRCEventListener, Runnable {
 			// User successfully joins channel
 		} else if (type == Type.JOIN) {
 			JoinEvent je = (JoinEvent) e;
-			// TODO: Check if joined user is in usersFileList, if not, add that users to usersFileList
+			if (usersList.contains(new User(je.getNick()))) {                         // Check if joined user exists in usersList
+				je.getChannel().say("I know you =.=");
+			} else {
+				je.getChannel().say("New user detected, " + je.getNick() + ".");      // Add to usersFile and write to file if not
+				usersList.add(new User(je.getNick()));
+				
+				try {
+					bWriter = new BufferedWriter(new FileWriter(usersFile, true));
+					bWriter.write(je.getNick() + " " + Rank.Standard.toString());
+					bWriter.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+					System.out.println(usersFile.getName() + " inaccessable.");
+				}
+			}
 
 			// User successfully leaves channel
 		} else if (type == Type.QUIT) {

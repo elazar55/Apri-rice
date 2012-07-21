@@ -14,6 +14,11 @@ public class User {
 		this.rank = rank;
 	}
 	
+	public User(String nick) {
+		this.nick = nick;
+		this.rank = Rank.Standard;
+	}
+	
 	public String getNick() {
 		return nick;
 	}
