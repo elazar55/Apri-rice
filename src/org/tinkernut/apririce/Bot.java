@@ -16,6 +16,7 @@ import org.tinkernut.apririce.textUtils.TextBuffer;
 import jerklib.ConnectionManager;
 import jerklib.Profile;
 import jerklib.events.IRCEvent;
+import jerklib.events.InviteEvent;
 import jerklib.events.JoinCompleteEvent;
 import jerklib.events.JoinEvent;
 import jerklib.events.MessageEvent;
@@ -59,7 +60,7 @@ public class Bot implements IRCEventListener, Runnable {
 		this.botName = botName;
 		commandsMap = new HashMap<String, Command>();
 		lastMessageTime = 0;
-		
+
 		// Count number of commands for for loop if directory exists
 		File commandsDirectory = new File("src\\org\\tinkernut\\apririce\\commands\\");
 		// If directory doesn't exist
@@ -181,7 +182,7 @@ public class Bot implements IRCEventListener, Runnable {
 			// Connection to channel successful
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
-			
+
 			//TODO: Rewrite user logging, saving, etc,.
 			/*
 			 * User logging, etc,.
@@ -208,20 +209,20 @@ public class Bot implements IRCEventListener, Runnable {
 				while ((buffer = bReader.readLine()) != null) {					
 					Rank rank = null;
 					String nick = "";
-					
+
 					if (buffer.contains(" ")) {
 						nick = buffer.substring(0, buffer.indexOf(" "));						
 					} else {						
 						nick = buffer;						
 					}
-					
+
 					// Check if rank admin exists in txt file. If so, rank = admin, else, rank = standard
 					if (buffer.substring(buffer.indexOf(" ") + 1).equalsIgnoreCase("admin")) {
 						rank = Rank.Admin;
 					} else {
 						rank = Rank.Standard;
 					}
-					
+
 					usersFileList.add(new User(nick, rank));
 				}
 
@@ -271,7 +272,7 @@ public class Bot implements IRCEventListener, Runnable {
 			} else {
 				je.getChannel().say("New user detected, " + je.getNick() + ".");      // Add to usersFile and write to file if not
 				usersList.add(new User(je.getNick()));
-				
+
 				try {
 					bWriter = new BufferedWriter(new FileWriter(usersFile, true));
 					bWriter.write(je.getNick() + " " + Rank.Standard.toString());
@@ -286,6 +287,11 @@ public class Bot implements IRCEventListener, Runnable {
 		} else if (type == Type.QUIT) {
 			QuitEvent qe = (QuitEvent) e;
 
+			// Bot successfully invited to channel
+		} else if (type == Type.INVITE_EVENT) {
+			InviteEvent ie = (InviteEvent) e;
+
+			new Thread(new Bot(ie.getSession().getServerInformation().getServerName(), ie.getChannelName(), "Apri-rice_" + ie.getChannelName().substring(1))).start();
 			// Message successfully received in channel
 		} else if (type == Type.CHANNEL_MESSAGE) {
 			// Logging.
@@ -320,17 +326,17 @@ public class Bot implements IRCEventListener, Runnable {
 						usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter--;
 					}
 				}
-				
+
 				TextBuffer.addAndDisplay(me.getNick() + "'s Flood counter is: " + usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter, me);
 				// If user's floodCounter hit maximumFlood
 				if (usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter == maximumFlood) {
 					me.getChannel().kick(me.getNick(), "Stop flooding.");
 					usersList.get(usersList.indexOf(new User(me.getNick(), Rank.Standard))).floodCounter = 0;
 				}
-				
+
 				lastMessageTime = System.currentTimeMillis();
 			}
-			
+
 			//Check and execute any commands
 			if (me.getMessage().startsWith(CMD_START)) {
 				String commandString = Parser.stripCommand(me.getMessage());

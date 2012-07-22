@@ -7,11 +7,13 @@ public abstract class Command implements Runnable{
 	//TODO: Pass User to constructor, hence finish user tracking!
 	protected String params;
 	protected MessageEvent me;
+	protected Bot bot;
 	final protected String helpText = "Some help text.";
 	
 	public void init(String params, MessageEvent me, Bot bot) {
 		this.params = params;
 		this.me = me;
+		this.bot = bot;
 	}
 	
 	public void initPriv(String params, MessageEvent me, Bot bot) {

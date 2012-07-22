@@ -1,17 +1,9 @@
 package org.tinkernut.apririce.commands;
 
-import org.tinkernut.apririce.Bot;
 import org.tinkernut.apririce.textUtils.Parser;
 import jerklib.Channel;
-import jerklib.events.MessageEvent;
 
 public class NickServCommand extends Command {
-	Bot bot;
-
-	public void init(String params, MessageEvent me, Bot bot) {
-		super.init(params, me, bot);
-		this.bot = bot;
-	}
 	
 	public void exec() {
 		

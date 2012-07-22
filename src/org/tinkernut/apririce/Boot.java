@@ -98,15 +98,5 @@ public class Boot {
 				e.printStackTrace();
 			}
 		}
-		while (true) {
-			int lastThreadCount = Thread.activeCount();
-
-			for (int i = 0; i < 8; i++) {				
-				if (Thread.activeCount() == i && lastThreadCount != i) {
-					System.out.println("Total thread count changed to "+ i);
-				}
-
-			}
-		}
 	}
 }
