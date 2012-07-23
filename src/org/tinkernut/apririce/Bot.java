@@ -41,7 +41,7 @@ public class Bot implements IRCEventListener, Runnable {
 	private BufferedReader bReader;
 	private String botName;
 	public LinkedList<User> usersList;
-	private File usersFile;
+	public File usersFile;
 	private String password = "";
 	private final int maximumFlood = 10;
 	private long lastMessageTime;
@@ -105,7 +105,6 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 		}
 
-		// TODO: Create storage
 
 		// Optional nick (other than default) and password read from config file for specific channel
 		File configFile = new File(channelName + "_config.txt");
@@ -183,7 +182,6 @@ public class Bot implements IRCEventListener, Runnable {
 		} else if (type == Type.JOIN_COMPLETE) {
 			JoinCompleteEvent jce = (JoinCompleteEvent) e;
 
-			//TODO: Rewrite user logging, saving, etc,.
 			/*
 			 * User logging, etc,.
 			 */
@@ -307,7 +305,6 @@ public class Bot implements IRCEventListener, Runnable {
 			}
 
 			MessageEvent me = (MessageEvent) e;
-			// TODO: Per user flood control
 			// Flood checking
 			if (isFloodChecking ) {
 				// Check current message time against floodDeclineInterval. Increment user's floodCounter if too low.
