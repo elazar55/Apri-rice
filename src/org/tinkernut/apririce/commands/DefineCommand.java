@@ -32,6 +32,7 @@ public class DefineCommand extends Command {
 
 				if (urlMap.containsKey(Parser.getArgument(params.toLowerCase(), 1))) {
 					//Replace special characters in to be defined String
+					// TODO: Fix Wikipedia whitespace connection problem.
 					String urlAddon = Parser.stripArguments(params);
 					if (urlMap.get(Parser.getArgument(params, 1)).charReplacement.equals(characterReplacement.PERCENT)) {
 						urlAddon = urlAddon.replace(" ", "%20");
